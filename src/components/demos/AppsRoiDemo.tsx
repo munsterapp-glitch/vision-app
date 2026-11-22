@@ -100,7 +100,7 @@ export function AppsRoiDemo({
                 {t.liveReference.title}
               </h4>
               <span className="font-mono text-xs text-slate-400">
-                calm-mermaid-8efc84.netlify.app
+                lucent-kashata-59eb70.netlify.app
               </span>
             </div>
             <p className="max-w-2xl text-sm text-slate-400">

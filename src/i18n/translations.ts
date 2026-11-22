@@ -120,6 +120,22 @@ export interface Translations {
     afterLabel: string;
     applyToAnalysis: string;
   };
+  mobileShowcase: {
+    kicker: string;
+    title: string;
+    subtitle: string;
+    requestSimilarCta: string;
+    openExternal: string;
+    projects: Array<{
+      id: 'hausmeister' | 'nataly_beauty' | 'baumeister' | 'vision_tg';
+      name: string;
+      tag: string;
+      stack: string;
+      shortDesc: string;
+      fullDesc: string;
+      highlights: string[];
+    }>;
+  };
   feedback: {
     prompt: string;
     placeholder: string;
@@ -281,7 +297,7 @@ export const translations: Record<Language, Translations> = {
       title: 'Telegram Business Bot Vorschau',
       subtitle:
         'Klicken Sie auf die Inline-Buttons direkt im Smartphone-Mockup, um Live-Antworten für Bestellstatus, Sofort-Angebote oder Sprachnotiz-zu-Aufgabe zu testen.',
-      botHandle: '@VisionIT_BusinessBot',
+      botHandle: '@VisionITsystems_bot',
       botStatus: 'Bot · Aktiv über Webhook',
       welcomeText:
         'Willkommen im Vision IT Business Bot. Wählen Sie einen automatisierten Geschäftsprozess:',
@@ -337,7 +353,7 @@ export const translations: Record<Language, Translations> = {
         title: 'Natali Beauty App',
         description:
           'Interaktive Web-Applikation für Beauty-Studio-Services, Terminverwaltung und digitale Kundenbindung — live im Einsatz.',
-        url: 'https://calm-mermaid-8efc84.netlify.app',
+        url: 'https://lucent-kashata-59eb70.netlify.app/',
         cta: 'Natali Beauty App öffnen',
       },
       roiTitle: 'ROI & Zeitersparnis Rechner',
@@ -355,6 +371,72 @@ export const translations: Record<Language, Translations> = {
       beforeLabel: 'Aktueller manueller Aufwand / Jahr',
       afterLabel: 'Verbleibender Aufwand nach Automation',
       applyToAnalysis: 'Ergebnis in kostenlose Erstanalyse übernehmen',
+    },
+    mobileShowcase: {
+      kicker: 'Mobile Live-Test · 4 Kundenprojekte im Smartphone-Display',
+      title: 'Ausgewählte Apps & Bots direkt mobil testen',
+      subtitle:
+        'Wählen Sie eines der vier Projekte aus, um die Oberfläche direkt im eingebetteten Smartphone-Display interaktiv zu bedienen.',
+      requestSimilarCta: 'Ähnliches Projekt anfragen',
+      openExternal: 'Im Vollbild öffnen',
+      projects: [
+        {
+          id: 'hausmeister',
+          name: 'HausmeisterPro App',
+          tag: 'Live Embed',
+          stack: 'FlutterFlow · Dart · PocketBase · Offline-Sync',
+          shortDesc: 'Live eingebettete Facility-App unter hausmeister.pro.vision-it-systems.de.',
+          fullDesc:
+            'Mobile Einsatz-App für Hausmeisterdienste und Immobilienverwaltungen mit Objekt-Auswahl, Checklisten, Zählerstandserfassung und direkter Ticket-Weiterleitung.',
+          highlights: [
+            'Offline-fähige Aufgabenlisten je Wohn- & Gewerbeobjekt',
+            'Digitale Strom-, Wasser- & Gaszähler-Erfassung',
+            'Mängeltickets mit direkter Verwaltungs-Synchronisation',
+          ],
+        },
+        {
+          id: 'nataly_beauty',
+          name: 'NatalyBeauty App',
+          tag: 'Live Embed',
+          stack: 'React · Responsive Web App · Netlify Edge',
+          shortDesc: 'Live eingebettete Beauty-Studio-App unter lucent-kashata-59eb70.netlify.app.',
+          fullDesc:
+            'Produktive Beauty- & Terminbuchungs-Applikation für Behandlungen, Preisübersicht und mobile Kundenansprache — hier direkt als Live-Embed im Smartphone-Frame.',
+          highlights: [
+            'Echtzeit-Einbettung der produktiven App-URL',
+            'Mobile-First Oberfläche für schnelle Termin- & Servicewahl',
+            'Nahtlose Integration in bestehende Studio-Workflows',
+          ],
+        },
+        {
+          id: 'baumeister',
+          name: 'Baumeister Pro App',
+          tag: 'Live Embed',
+          stack: 'FlutterFlow · Android / iOS · Docker API',
+          shortDesc: 'Live eingebettete Bau-App unter bauapp.vision-it-systems.de.',
+          fullDesc:
+            'Mobile Baustellen-Software für Bauleiter und Handwerksbetriebe: Personalstärke dokumentieren, Gewerke-Fortschritt aktualisieren und Abnahmen vor Ort protokollieren.',
+          highlights: [
+            'Tagesaktuelles Bautagebuch mit Personal- & Wetterprotokoll',
+            'Prozentuale Fortschrittskontrolle je Gewerk',
+            'Strukturierte Abnahme- & Mängel-Checklisten',
+          ],
+        },
+        {
+          id: 'vision_tg',
+          name: 'Vision Ki Telegram Bot',
+          tag: 'Live Bot',
+          stack: 'Telegram Bot API · n8n · Whisper ASR · Hetzner DE',
+          shortDesc: 'Live-Bot unter t.me/VisionITsystems_bot für Angebote, Sprachnotizen & CRM-Sync.',
+          fullDesc:
+            'Direkte Geschäftsautomatisierung im Telegram-Messenger: KI-Angebote generieren, Sprachnachrichten transkribieren und Vorgänge per Webhook ans CRM übergeben.',
+          highlights: [
+            'Interaktive Inline-Buttons & Freitext-KI-Verarbeitung',
+            'Sprachnotiz-zu-Aufgabe per OpenAI Whisper',
+            'DSGVO-konformer Webhook-Betrieb auf deutschen Docker-Nodes',
+          ],
+        },
+      ],
     },
     feedback: {
       prompt: 'Wie hilfreich war dieses Demo-Modul?',
@@ -523,7 +605,7 @@ export const translations: Record<Language, Translations> = {
       title: 'Telegram Business Bot Preview',
       subtitle:
         'Click the inline keyboard buttons inside the smartphone mockup to test live order lookups, instant quote generation, and voice-to-task creation.',
-      botHandle: '@VisionIT_BusinessBot',
+      botHandle: '@VisionITsystems_bot',
       botStatus: 'Bot · Active Webhook',
       welcomeText:
         'Welcome to Vision IT Business Bot. Select an automated business workflow below:',
@@ -579,7 +661,7 @@ export const translations: Record<Language, Translations> = {
         title: 'Natali Beauty App',
         description:
           'Interactive web application for beauty studio services, appointment booking, and digital client engagement — running live in production.',
-        url: 'https://calm-mermaid-8efc84.netlify.app',
+        url: 'https://lucent-kashata-59eb70.netlify.app/',
         cta: 'Open Natali Beauty App',
       },
       roiTitle: 'ROI & Time-Savings Calculator',
@@ -597,6 +679,72 @@ export const translations: Record<Language, Translations> = {
       beforeLabel: 'Current manual workload / year',
       afterLabel: 'Remaining workload after automation',
       applyToAnalysis: 'Carry calculation into Free Analysis',
+    },
+    mobileShowcase: {
+      kicker: 'Mobile Live Test · 4 Client Projects in Smartphone Display',
+      title: 'Test Deployed Apps & Bots Inside the Mobile Display',
+      subtitle:
+        'Select any of the four projects on the left to interact directly with its mobile interface inside the embedded smartphone frame.',
+      requestSimilarCta: 'Request similar project',
+      openExternal: 'Open full screen',
+      projects: [
+        {
+          id: 'hausmeister',
+          name: 'HausmeisterPro App',
+          tag: 'Live Embed',
+          stack: 'FlutterFlow · Dart · PocketBase · Offline Sync',
+          shortDesc: 'Live embedded facility app from hausmeister.pro.vision-it-systems.de.',
+          fullDesc:
+            'Field-ready mobile app for facility managers and property caretakers featuring multi-property checklists, meter logging, and instant defect ticket routing.',
+          highlights: [
+            'Offline-ready inspection tasks per residential/commercial site',
+            'Digital electricity, water & gas meter capture',
+            'Instant defect tickets synced to property management',
+          ],
+        },
+        {
+          id: 'nataly_beauty',
+          name: 'NatalyBeauty App',
+          tag: 'Live Embed',
+          stack: 'React · Responsive Web App · Netlify Edge',
+          shortDesc: 'Live embedded beauty studio app from lucent-kashata-59eb70.netlify.app.',
+          fullDesc:
+            'Production beauty & booking web application showcasing treatments, service pricing, and mobile client booking — embedded live inside the phone viewport.',
+          highlights: [
+            'Live production embed running inside the mobile frame',
+            'Mobile-first UX for treatment discovery & booking',
+            'Designed for fast studio customer conversion',
+          ],
+        },
+        {
+          id: 'baumeister',
+          name: 'Baumeister Pro App',
+          tag: 'Live Embed',
+          stack: 'FlutterFlow · Android / iOS · Docker API',
+          shortDesc: 'Live embedded construction app from bauapp.vision-it-systems.de.',
+          fullDesc:
+            'Mobile construction site software for site managers and contractors to log daily crew counts, update trade completion, and run handover inspections.',
+          highlights: [
+            'Daily site diary with crew count & weather log',
+            'Real-time completion tracking per construction trade',
+            'Structured site handover & snagging checklists',
+          ],
+        },
+        {
+          id: 'vision_tg',
+          name: 'Vision Ki Telegram Bot',
+          tag: 'Live Bot',
+          stack: 'Telegram Bot API · n8n · Whisper ASR · Hetzner DE',
+          shortDesc: 'Live bot at t.me/VisionITsystems_bot for quotes, voice-to-task & CRM sync.',
+          fullDesc:
+            'Direct business automation inside Telegram: generate instant AI quotes, transcribe voice memos into tasks, and sync requests via webhook to your CRM.',
+          highlights: [
+            'Interactive inline keyboards & free-text AI replies',
+            'Voice-note-to-task transcription via Whisper',
+            'GDPR-compliant webhook execution on German Docker nodes',
+          ],
+        },
+      ],
     },
     feedback: {
       prompt: 'How useful was this live demo module?',

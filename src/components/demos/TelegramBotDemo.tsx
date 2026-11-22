@@ -2,6 +2,7 @@ import {
   ArrowLeft,
   Bot,
   CheckCheck,
+  ExternalLink,
   FileText,
   Mic,
   Package,
@@ -267,14 +268,25 @@ export function TelegramBotDemo({
           <h3 className="font-display text-lg font-semibold text-white">{t.title}</h3>
           <p className="mt-1 text-sm text-slate-400">{t.subtitle}</p>
         </div>
-        <button
-          type="button"
-          onClick={handleReset}
-          className="inline-flex items-center gap-1.5 rounded-lg border border-white/[0.1] px-3 py-1.5 text-xs font-medium text-slate-300 hover:border-white/25 hover:text-white whitespace-nowrap shrink-0 cursor-pointer"
-        >
-          <RotateCcw className="h-3.5 w-3.5" />
-          <span>{t.resetBtn}</span>
-        </button>
+        <div className="flex items-center gap-2 shrink-0">
+          <a
+            href="https://t.me/VisionITsystems_bot"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 rounded-lg border border-cyan-400/40 bg-cyan-500/15 px-3 py-1.5 text-xs font-semibold text-cyan-200 hover:bg-cyan-500/25 hover:text-white whitespace-nowrap shrink-0"
+          >
+            <span>{isDE ? 'In Telegram öffnen' : 'Open in Telegram'}</span>
+            <ExternalLink className="h-3.5 w-3.5" />
+          </a>
+          <button
+            type="button"
+            onClick={handleReset}
+            className="inline-flex items-center gap-1.5 rounded-lg border border-white/[0.1] px-3 py-1.5 text-xs font-medium text-slate-300 hover:border-white/25 hover:text-white whitespace-nowrap shrink-0 cursor-pointer"
+          >
+            <RotateCcw className="h-3.5 w-3.5" />
+            <span>{t.resetBtn}</span>
+          </button>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-12">
@@ -294,6 +306,15 @@ export function TelegramBotDemo({
                   </div>
                   <div className="text-[11px] text-cyan-300">{t.botStatus}</div>
                 </div>
+                <a
+                  href="https://t.me/VisionITsystems_bot"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Open @VisionITsystems_bot in Telegram"
+                  className="rounded p-1.5 text-slate-300 hover:bg-white/10 hover:text-white"
+                >
+                  <ExternalLink className="h-4 w-4" />
+                </a>
               </div>
 
               {/* Telegram Chat Feed */}

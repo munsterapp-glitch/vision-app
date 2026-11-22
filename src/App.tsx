@@ -2,6 +2,7 @@ import { Bot, Cpu, MessageCircle, Workflow } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
 import { AiChatbotDemo } from './components/demos/AiChatbotDemo';
 import { AppsRoiDemo } from './components/demos/AppsRoiDemo';
+import { MobileProjectsShowcase } from './components/demos/MobileProjectsShowcase';
 import { N8nEmailDemo } from './components/demos/N8nEmailDemo';
 import { TelegramBotDemo } from './components/demos/TelegramBotDemo';
 import { FeedbackBar } from './components/FeedbackBar';
@@ -185,6 +186,12 @@ export default function App() {
                 onNotify={notify}
               />
             </div>
+
+            <MobileProjectsShowcase
+              lang={lang}
+              t={t.mobileShowcase}
+              onApplyToLeadModal={openLeadModalWithPrefill}
+            />
           </div>
         </section>
 
