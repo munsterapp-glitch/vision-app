@@ -21,6 +21,54 @@
       href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400..700;1,9..40,400..700&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap"
       rel="stylesheet"
     />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Wie bleibt unsere KI-Automatisierung mit ChatGPT/LLMs in Deutschland DSGVO-konform?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Wir hosten die gesamte Orchestrierung (n8n), Datenbanken (PocketBase) und Schnittstellen isoliert per Docker auf deutschen Hetzner-Servern. Personenbezogene Daten werden vor der Verarbeitung anonymisiert oder über datenschutzkonforme EU-Endpunkte (z.B. Azure OpenAI EU oder lokal gehostete Open-Source-Modelle) verarbeitet."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Warum nutzen wir n8n statt Zapier oder Make?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Bei hohen Datenvolumen werden SaaS-Tools wie Zapier schnell teuer und speichern Daten oft außerhalb der EU. Mit selbst gehostetem n8n zahlen Sie keine Gebühren pro einzelnem Workflow-Schritt, haben unbegrenzte Ausführungskapazität und 100 % Kontrolle über Ihre Geschäftsdaten."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Wie funktioniert eine mobile App für Handwerker oder Hausmeister ohne Internetempfang (Offline-Sync)?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Unsere FlutterFlow-Apps (wie HausmeisterPro oder Baumeister Pro) speichern Zählerstände, Fotos und Checklisten lokal auf dem Smartphone. Sobald wieder eine Mobilfunk- oder WLAN-Verbindung besteht, synchronisiert sich die App automatisch über PocketBase mit dem Büro."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Kann ein KI-Agent direkt Termine in unseren bestehenden Kalender buchen?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Ja. Über offene Schnittstellen wie Cal.com (ebenfalls self-hosted auf Hetzner möglich) oder direkte Webhooks prüft unser KI-Berater oder Voice-Agent freie Zeitfenster in Echtzeit und trägt qualifizierte Termine direkt in Google Calendar, Outlook oder Ihr CRM ein."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Wie schnell ist ein erstes Automatisierungs-Projekt einsatzbereit?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Einfache n8n-Pipelines oder Telegram-Bots sind oft innerhalb von 5 bis 10 Werktagen produktiv. Individuelle Apps inkl. Backend dauern je nach Funktionsumfang zwischen 3 und 6 Wochen."
+            }
+          }
+        ]
+      }
+    </script>
   </head>
   <body class="bg-[#090d16] text-slate-100 antialiased selection:bg-cyan-500/30 selection:text-cyan-100">
     <div id="root"></div>

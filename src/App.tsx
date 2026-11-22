@@ -5,6 +5,7 @@ import { AppsRoiDemo } from './components/demos/AppsRoiDemo';
 import { MobileProjectsShowcase } from './components/demos/MobileProjectsShowcase';
 import { N8nEmailDemo } from './components/demos/N8nEmailDemo';
 import { TelegramBotDemo } from './components/demos/TelegramBotDemo';
+import { FaqKnowledgeSection } from './components/FaqKnowledgeSection';
 import { FeedbackBar } from './components/FeedbackBar';
 import { Footer } from './components/Footer';
 import { Hero } from './components/Hero';
@@ -12,6 +13,7 @@ import { LeadCaptureSection } from './components/LeadCaptureSection';
 import { LeadModal } from './components/LeadModal';
 import { LegalModal } from './components/LegalModal';
 import { Navbar } from './components/Navbar';
+import { PricingGuideSection } from './components/PricingGuideSection';
 import { ToastContainer } from './components/ToastContainer';
 import { translations } from './i18n/translations';
 import type { DemoModuleId, Language, LeadPrefill, ToastItem } from './types';
@@ -194,6 +196,16 @@ export default function App() {
             />
           </div>
         </section>
+
+        <PricingGuideSection
+          lang={lang}
+          onOpenLeadModal={openLeadModalWithPrefill}
+        />
+
+        <FaqKnowledgeSection
+          lang={lang}
+          onOpenLeadModal={openLeadModalWithPrefill}
+        />
 
         <LeadCaptureSection
           lang={lang}
