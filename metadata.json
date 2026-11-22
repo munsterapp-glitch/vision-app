@@ -1,0 +1,6 @@
+{
+  "name": "Vision IT Systems — Live Automation & AI Sandbox",
+  "description": "Interaktive Live-Demo für KI-Chatbots, n8n E-Mail-Automatisierung, Telegram Business Bots, FlutterFlow Apps und DSGVO-konformes Docker-Hosting in Deutschland.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
