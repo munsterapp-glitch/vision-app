@@ -10,25 +10,61 @@ interface LeadCaptureSectionProps {
   onNotify: (type: 'success' | 'error' | 'info', title: string, description: string) => void;
 }
 
+const DELIVERABLES_BY_LANG: Record<Language, string[]> = {
+  de: [
+    'Prozess-Audit & konkrete Einsparpotenziale (Stunden / €)',
+    'Architekturvorschlag für n8n, KI-Agenten oder FlutterFlow',
+    'Verbindliche Budget- & Zeitplanung inkl. Hetzner Docker-Hosting',
+  ],
+  en: [
+    'Workflow audit & concrete time/cost savings projection',
+    'Architecture blueprint for n8n, AI agents, or FlutterFlow',
+    'Fixed-scope timeline & budget estimate incl. Hetzner Docker hosting',
+  ],
+  hr: [
+    'Analiza procesa i konkretne uštede (sati / €)',
+    'Prijedlog arhitekture za n8n, AI agente ili FlutterFlow',
+    'Jasan proračun i vremenski plan uklj. Hetzner Docker hosting',
+  ],
+  ru: [
+    'Аудит процессов и расчёт экономии (часы / €)',
+    'Архитектура решения для n8n, ИИ-агентов или FlutterFlow',
+    'Фиксированная смета и сроки с хостингом Docker на Hetzner',
+  ],
+  tr: [
+    'Süreç denetimi ve somut tasarruf potansiyeli (saat / €)',
+    'n8n, AI ajanları veya FlutterFlow için mimari önerisi',
+    'Hetzner Docker barındırma dahil net bütçe ve zaman planı',
+  ],
+  pl: [
+    'Audyt procesów i konkretny potencjał oszczędności (godz. / €)',
+    'Propozycja architektury dla n8n, agentów AI lub FlutterFlow',
+    'Wiążący budżet i harmonogram z hostingiem Docker na Hetzner',
+  ],
+  sq: [
+    'Auditimi i procesit & potenciali konkret i kursimit (orë / €)',
+    'Propozim arkitekture për n8n, agjentë AI ose FlutterFlow',
+    'Planifikim i qartë buxheti & afati përfshirë Hetzner Docker',
+  ],
+};
+
+const PRIVACY_LINE_BY_LANG: Record<Language, string> = {
+  de: 'Keine Weitergabe an Dritte · Serverstandort Deutschland',
+  en: 'Zero third-party data sharing · Hosted in Germany',
+  hr: 'Bez dijeljenja s trećim stranama · Serveri u Njemačkoj',
+  ru: 'Без передачи третьим лицам · Серверы в Германии',
+  tr: 'Üçüncü taraflarla paylaşım yok · Almanya sunucuları',
+  pl: 'Brak udostępniania osobom trzecim · Serwery w Niemczech',
+  sq: 'Pa shpërndarje te palët e treta · Serverë në Gjermani',
+};
+
 export function LeadCaptureSection({
   lang,
   t,
   prefill,
   onNotify,
 }: LeadCaptureSectionProps) {
-  const isDE = lang === 'de';
-
-  const deliverables = isDE
-    ? [
-        'Prozess-Audit & konkrete Einsparpotenziale (Stunden / €)',
-        'Architekturvorschlag für n8n, KI-Agenten oder FlutterFlow',
-        'Verbindliche Budget- & Zeitplanung inkl. Hetzner Docker-Hosting',
-      ]
-    : [
-        'Workflow audit & concrete time/cost savings projection',
-        'Architecture blueprint for n8n, AI agents, or FlutterFlow',
-        'Fixed-scope timeline & budget estimate incl. Hetzner Docker hosting',
-      ];
+  const deliverables = DELIVERABLES_BY_LANG[lang];
 
   return (
     <section id="analysis" className="border-t border-white/[0.06] py-16 lg:py-20">
@@ -60,19 +96,11 @@ export function LeadCaptureSection({
             <div className="space-y-2 border-t border-white/[0.08] pt-5 text-xs text-slate-400">
               <div className="flex items-center gap-2">
                 <Server className="h-4 w-4 text-cyan-400 shrink-0" />
-                <span>
-                  {isDE
-                    ? 'PocketBase Backend: pb.demo.vision-it-systems.de'
-                    : 'PocketBase Backend: pb.demo.vision-it-systems.de'}
-                </span>
+                <span>PocketBase Backend: pb.demo.vision-it-systems.de</span>
               </div>
               <div className="flex items-center gap-2">
                 <Lock className="h-4 w-4 text-cyan-400 shrink-0" />
-                <span>
-                  {isDE
-                    ? 'Keine Weitergabe an Dritte · Serverstandort Deutschland'
-                    : 'Zero third-party data sharing · Hosted in Germany'}
-                </span>
+                <span>{PRIVACY_LINE_BY_LANG[lang]}</span>
               </div>
             </div>
           </div>

@@ -5,10 +5,12 @@ import {
   Check,
   CheckCheck,
   ClipboardCheck,
+  Copy,
   ExternalLink,
   Gauge,
   Hammer,
   HardHat,
+  KeyRound,
   MessageCircle,
   Mic,
   Plus,
@@ -25,7 +27,8 @@ export type MobileProjectId =
   | 'hausmeister'
   | 'nataly_beauty'
   | 'baumeister'
-  | 'vision_tg';
+  | 'vision_tg'
+  | 'kraftbruder';
 
 interface MobileProjectsShowcaseProps {
   lang: Language;
@@ -38,6 +41,500 @@ const PROJECT_SERVICES: Record<MobileProjectId, ServiceOptionId[]> = {
   nataly_beauty: ['web_android_app', 'ai_chatbot'],
   baumeister: ['web_android_app', 'n8n_automation', 'docker_hosting'],
   vision_tg: ['telegram_bot', 'ai_chatbot', 'n8n_automation'],
+  kraftbruder: ['web_android_app', 'n8n_automation', 'docker_hosting'],
+};
+
+interface ShowcaseUiCopy {
+  interestedNote: string;
+  tgInit: string;
+  tgCustomReply: (text: string) => string;
+  hmTasks: [string, string, string];
+  hmTodayTasks: string;
+  hmLogMeter: string;
+  hmSaveReading: string;
+  hmReportDefect: string;
+  hmDescPlaceholder: string;
+  hmSubmitTicket: string;
+  hmStatusNew: string;
+  hmStatusOpen: string;
+  hmNavTasks: string;
+  hmNavMeters: string;
+  hmNavDefects: string;
+  bmLogs: [string, string];
+  bmTrades: [string, string, string, string];
+  bmChecks: [string, string, string];
+  bmSiteLine: string;
+  bmCrewLabel: string;
+  bmNotePlaceholder: string;
+  bmWorkersUnit: string;
+  bmProgressLabel: string;
+  bmInspectLabel: string;
+  bmPassed: string;
+  bmPending: string;
+  bmNavDiary: string;
+  bmNavTrades: string;
+  bmNavInspect: string;
+  tgQuoteBtn: string;
+  tgQuoteReply: string;
+  tgVoiceBtn: string;
+  tgVoiceReply: string;
+  tgMsgPlaceholder: string;
+}
+
+const SHOWCASE_UI: Record<Language, ShowcaseUiCopy> = {
+  de: {
+    interestedNote: 'Interesse an Projekt-Referenz',
+    tgInit:
+      'Hallo! Ich bin der Vision KI Telegram Bot. Tippen Sie auf eine Schnellaktion oder schreiben Sie mir direkt.',
+    tgCustomReply: (text) =>
+      `KI-Analyse abgeschlossen:\n"${text}" wurde klassifiziert und als Workflow-Vorgang #VIS-209 im CRM vorgemerkt.`,
+    hmTasks: [
+      'Heizungsdruck Keller B prüfen',
+      'LED-Strahler Treppenhaus EG',
+      'Rauchwarnmelder Wartung OG 3',
+    ],
+    hmTodayTasks: 'Heutige Rundgang-Aufgaben',
+    hmLogMeter: 'Zählerstand erfassen',
+    hmSaveReading: 'Zählerstand speichern',
+    hmReportDefect: 'Mängelmeldung erfassen',
+    hmDescPlaceholder: 'Kurzbeschreibung...',
+    hmSubmitTicket: 'Ticket an Verwaltung senden',
+    hmStatusNew: 'Neu',
+    hmStatusOpen: 'Offen',
+    hmNavTasks: 'Aufträge',
+    hmNavMeters: 'Zähler',
+    hmNavDefects: 'Mängel',
+    bmLogs: [
+      'Rohbau OG 2: Deckenbewehrung abgenommen',
+      'TGA: Steigleitungen Schacht West verlegt',
+    ],
+    bmTrades: [
+      'Erdarbeiten & Fundament',
+      'Rohbau & Mauerwerk',
+      'Fenster & Fassade',
+      'Heizung / Lüftung / Elektro',
+    ],
+    bmChecks: [
+      'Brandschutztüren T30 EG',
+      'Estrich Restfeuchte < 2,0 %',
+      'Absturzsicherung Balkon OG 2',
+    ],
+    bmSiteLine: 'Baustelle: Quartier Nord · KW 47',
+    bmCrewLabel: 'Fachkräfte vor Ort:',
+    bmNotePlaceholder: 'Bautagebuch-Eintrag...',
+    bmWorkersUnit: 'Personen',
+    bmProgressLabel: 'Baufortschritt nach Gewerk',
+    bmInspectLabel: 'Abnahme-Checkliste',
+    bmPassed: 'Freigegeben',
+    bmPending: 'Prüfen',
+    bmNavDiary: 'Bautagebuch',
+    bmNavTrades: 'Gewerke',
+    bmNavInspect: 'Abnahme',
+    tgQuoteBtn: 'KI-Angebot generieren',
+    tgQuoteReply:
+      'Sofort-Kalkulation #ANG-741 erstellt:\n· Paket: n8n + Telegram Bot\n· Lieferzeit: 10 Werktage\n· Hosting: Hetzner DE (DSGVO)',
+    tgVoiceBtn: 'Sprachnotiz → Aufgabe',
+    tgVoiceReply:
+      'Whisper Transkription (0:05):\n"Rechnung 842 für Nordmetall freigeben."\n→ Aufgabe in PocketBase & Jira angelegt.',
+    tgMsgPlaceholder: 'Nachricht an Bot...',
+  },
+  en: {
+    interestedNote: 'Interested in reference app',
+    tgInit:
+      'Hello! I am the Vision AI Telegram Bot. Tap a quick action below or send me a message.',
+    tgCustomReply: (text) =>
+      `AI analysis completed:\n"${text}" was classified and logged as workflow item #VIS-209 in CRM.`,
+    hmTasks: [
+      'Check boiler pressure Basement B',
+      'Replace hallway LED ground floor',
+      'Smoke detector check 3rd floor',
+    ],
+    hmTodayTasks: 'Today’s Facility Tasks',
+    hmLogMeter: 'Log Meter Reading',
+    hmSaveReading: 'Save Reading',
+    hmReportDefect: 'Report Property Defect',
+    hmDescPlaceholder: 'Short description...',
+    hmSubmitTicket: 'Submit Ticket',
+    hmStatusNew: 'New',
+    hmStatusOpen: 'Open',
+    hmNavTasks: 'Tasks',
+    hmNavMeters: 'Meters',
+    hmNavDefects: 'Defects',
+    bmLogs: [
+      '2nd floor shell: slab rebar approved',
+      'MEP: West shaft risers installed',
+    ],
+    bmTrades: [
+      'Earthworks & Foundation',
+      'Structural Shell',
+      'Windows & Facade',
+      'HVAC & Electrical',
+    ],
+    bmChecks: [
+      'Fire doors T30 ground floor',
+      'Screed moisture < 2.0%',
+      'Balcony safety rail 2nd floor',
+    ],
+    bmSiteLine: 'Site: North Quarter · W47',
+    bmCrewLabel: 'Crew on site:',
+    bmNotePlaceholder: 'Daily site note...',
+    bmWorkersUnit: 'workers',
+    bmProgressLabel: 'Progress by Trade',
+    bmInspectLabel: 'Site Inspection Checklist',
+    bmPassed: 'Passed',
+    bmPending: 'Pending',
+    bmNavDiary: 'Site Diary',
+    bmNavTrades: 'Trades',
+    bmNavInspect: 'Inspect',
+    tgQuoteBtn: 'Generate AI Quote',
+    tgQuoteReply:
+      'Instant Quote #ANG-741 created:\n· Package: n8n + Telegram Bot\n· Delivery: 10 business days\n· Hosting: Hetzner DE (GDPR)',
+    tgVoiceBtn: 'Voice Note → Task',
+    tgVoiceReply:
+      'Whisper Transcript (0:05):\n"Approve invoice 842 for Nordmetall."\n→ Task created in PocketBase & Jira.',
+    tgMsgPlaceholder: 'Message bot...',
+  },
+  hr: {
+    interestedNote: 'Interes za referentnu aplikaciju',
+    tgInit:
+      'Pozdrav! Ja sam Vision AI Telegram Bot. Dodirnite brzu radnju ili mi pošaljite poruku.',
+    tgCustomReply: (text) =>
+      `AI analiza dovršena:\n"${text}" je klasificirano i zabilježeno kao stavka #VIS-209 u CRM-u.`,
+    hmTasks: [
+      'Provjeri tlak kotlovnice Podrum B',
+      'Zamijeni LED svjetlo stubište prizemlje',
+      'Servis detektora dima 3. kat',
+    ],
+    hmTodayTasks: 'Današnji zadaci obilaska',
+    hmLogMeter: 'Unesi očitanje brojila',
+    hmSaveReading: 'Spremi očitanje',
+    hmReportDefect: 'Prijavi kvar na objektu',
+    hmDescPlaceholder: 'Kratki opis...',
+    hmSubmitTicket: 'Pošalji prijavu upravi',
+    hmStatusNew: 'Novo',
+    hmStatusOpen: 'Otvoreno',
+    hmNavTasks: 'Zadaci',
+    hmNavMeters: 'Brojila',
+    hmNavDefects: 'Kvarovi',
+    bmLogs: [
+      'Roh-bau 2. kat: armatura ploče odobrena',
+      'Instalacije: usponi zapadnog okna postavljeni',
+    ],
+    bmTrades: [
+      'Zemljani radovi i temelji',
+      'Konstrukcija i zidanje',
+      'Prozori i fasada',
+      'Grijanje / Ventilacija / Struja',
+    ],
+    bmChecks: [
+      'Protupožarna vrata T30 prizemlje',
+      'Vlaga estriha < 2,0 %',
+      'Zaštitna ograda balkona 2. kat',
+    ],
+    bmSiteLine: 'Gradilište: Kvart Sjever · Tj. 47',
+    bmCrewLabel: 'Radnici na gradilištu:',
+    bmNotePlaceholder: 'Unos u građevinski dnevnik...',
+    bmWorkersUnit: 'radnika',
+    bmProgressLabel: 'Napredak po strukama',
+    bmInspectLabel: 'Kontrolna lista preuzimanja',
+    bmPassed: 'Odobreno',
+    bmPending: 'Provjeriti',
+    bmNavDiary: 'Dnevnik',
+    bmNavTrades: 'Radovi',
+    bmNavInspect: 'Nadzor',
+    tgQuoteBtn: 'Generiraj AI ponudu',
+    tgQuoteReply:
+      'Brza ponuda #ANG-741 izrađena:\n· Paket: n8n + Telegram Bot\n· Isporuka: 10 radnih dana\n· Hosting: Hetzner DE (GDPR)',
+    tgVoiceBtn: 'Glasovna bilješka → Zadatak',
+    tgVoiceReply:
+      'Whisper transkripcija (0:05):\n"Odobriti račun 842 za Nordmetall."\n→ Zadatak kreiran u PocketBase i Jira.',
+    tgMsgPlaceholder: 'Poruka botu...',
+  },
+  ru: {
+    interestedNote: 'Интерес к референсному приложению',
+    tgInit:
+      'Здравствуйте! Я Vision AI Telegram Bot. Нажмите на быстрое действие или напишите мне сообщение.',
+    tgCustomReply: (text) =>
+      `ИИ-анализ завершён:\n"${text}" классифицировано и сохранено как процесс #VIS-209 в CRM.`,
+    hmTasks: [
+      'Проверить давление котла (Подвал B)',
+      'Заменить LED-светильник на 1 этаже',
+      'Проверка датчиков дыма (3 этаж)',
+    ],
+    hmTodayTasks: 'Задачи обхода на сегодня',
+    hmLogMeter: 'Внести показания счётчика',
+    hmSaveReading: 'Сохранить показания',
+    hmReportDefect: 'Зарегистрировать дефект',
+    hmDescPlaceholder: 'Краткое описание...',
+    hmSubmitTicket: 'Отправить заявку в УК',
+    hmStatusNew: 'Новая',
+    hmStatusOpen: 'Открыто',
+    hmNavTasks: 'Задачи',
+    hmNavMeters: 'Счётчики',
+    hmNavDefects: 'Дефекты',
+    bmLogs: [
+      'Монолит 2 этажа: армирование плиты принято',
+      'ОВиК: стояки западной шахты смонтированы',
+    ],
+    bmTrades: [
+      'Земляные работы и фундамент',
+      'Монолит и кладка',
+      'Окна и фасад',
+      'ОВиК и электрика',
+    ],
+    bmChecks: [
+      'Противопожарные двери T30 (1 эт.)',
+      'Влажность стяжки < 2,0 %',
+      'Ограждение балкона 2 этажа',
+    ],
+    bmSiteLine: 'Объект: Квартал Север · Нед. 47',
+    bmCrewLabel: 'Специалистов на объекте:',
+    bmNotePlaceholder: 'Запись в журнал работ...',
+    bmWorkersUnit: 'чел.',
+    bmProgressLabel: 'Прогресс по этапам',
+    bmInspectLabel: 'Чек-лист приёмки',
+    bmPassed: 'Принято',
+    bmPending: 'Проверить',
+    bmNavDiary: 'Журнал',
+    bmNavTrades: 'Этапы',
+    bmNavInspect: 'Приёмка',
+    tgQuoteBtn: 'Сформировать AI-КП',
+    tgQuoteReply:
+      'Мгновенный расчёт #ANG-741 готов:\n· Пакет: n8n + Telegram Bot\n· Срок: 10 рабочих дней\n· Хостинг: Hetzner DE (GDPR)',
+    tgVoiceBtn: 'Голосовая → Задача',
+    tgVoiceReply:
+      'Расшифровка Whisper (0:05):\n"Согласовать счёт 842 для Nordmetall."\n→ Задача создана в PocketBase и Jira.',
+    tgMsgPlaceholder: 'Написать боту...',
+  },
+  tr: {
+    interestedNote: 'Referans uygulamaya ilgi',
+    tgInit:
+      'Merhaba! Ben Vision AI Telegram Botu. Aşağıdaki hızlı eyleme dokunun veya doğrudan mesaj yazın.',
+    tgCustomReply: (text) =>
+      `Yapay zeka analizi tamamlandı:\n"${text}" sınıflandırıldı ve CRM’de #VIS-209 iş akışı kaydı olarak açıldı.`,
+    hmTasks: [
+      'Bodrum B kazan basıncını kontrol et',
+      'Zemin kat merdiven LED değişimi',
+      '3. kat duman dedektörü bakımı',
+    ],
+    hmTodayTasks: 'Bugünkü Tesis Görevleri',
+    hmLogMeter: 'Sayaç Okuması Gir',
+    hmSaveReading: 'Okumayı Kaydet',
+    hmReportDefect: 'Arıza Bildirimi Oluştur',
+    hmDescPlaceholder: 'Kısa açıklama...',
+    hmSubmitTicket: 'Yönetime Bildir',
+    hmStatusNew: 'Yeni',
+    hmStatusOpen: 'Açık',
+    hmNavTasks: 'Görevler',
+    hmNavMeters: 'Sayaçlar',
+    hmNavDefects: 'Arızalar',
+    bmLogs: [
+      '2. kat kaba inşaat: döşeme donatısı onaylandı',
+      'Mekanik: Batı şaft dikey hatları döşendi',
+    ],
+    bmTrades: [
+      'Hafriyat ve Temel',
+      'Kaba Yapı ve Duvar',
+      'Pencere ve Cephe',
+      'HVAC ve Elektrik',
+    ],
+    bmChecks: [
+      'T30 yangın kapıları zemin kat',
+      'Şap nem oranı < %2,0',
+      '2. kat balkon korkuluk güvenliği',
+    ],
+    bmSiteLine: 'Şantiye: Kuzey Bölgesi · H47',
+    bmCrewLabel: 'Sahadaki ekip:',
+    bmNotePlaceholder: 'Günlük şantiye notu...',
+    bmWorkersUnit: 'kişi',
+    bmProgressLabel: 'İş Kalemine Göre İlerleme',
+    bmInspectLabel: 'Teslim Kontrol Listesi',
+    bmPassed: 'Onaylandı',
+    bmPending: 'Kontrol Et',
+    bmNavDiary: 'Günlük',
+    bmNavTrades: 'İşler',
+    bmNavInspect: 'Denetim',
+    tgQuoteBtn: 'AI Teklifi Oluştur',
+    tgQuoteReply:
+      'Anlık Teklif #ANG-741 oluşturuldu:\n· Paket: n8n + Telegram Bot\n· Teslimat: 10 iş günü\n· Barındırma: Hetzner DE (GDPR)',
+    tgVoiceBtn: 'Sesli Not → Görev',
+    tgVoiceReply:
+      'Whisper Dökümü (0:05):\n"Nordmetall için 842 numaralı faturayı onayla."\n→ PocketBase ve Jira’da görev açıldı.',
+    tgMsgPlaceholder: 'Bota mesaj yaz...',
+  },
+  pl: {
+    interestedNote: 'Zainteresowanie aplikacją referencyjną',
+    tgInit:
+      'Cześć! Jestem Vision AI Telegram Bot. Wybierz szybką akcję poniżej lub napisz bezpośrednio.',
+    tgCustomReply: (text) =>
+      `Analiza AI zakończona:\n"${text}" zostało sklasyfikowane i zapisane jako proces #VIS-209 w CRM.`,
+    hmTasks: [
+      'Sprawdź ciśnienie kotła Piwnica B',
+      'Wymień lampę LED na parterze',
+      'Przegląd czujników dymu 3. piętro',
+    ],
+    hmTodayTasks: 'Dzisiejsze zadania obchodu',
+    hmLogMeter: 'Zapisz stan licznika',
+    hmSaveReading: 'Zapisz odczyt',
+    hmReportDefect: 'Zgłoś usterkę obiektu',
+    hmDescPlaceholder: 'Krótki opis...',
+    hmSubmitTicket: 'Wyślij zgłoszenie',
+    hmStatusNew: 'Nowe',
+    hmStatusOpen: 'Otwarte',
+    hmNavTasks: 'Zadania',
+    hmNavMeters: 'Liczniki',
+    hmNavDefects: 'Usterki',
+    bmLogs: [
+      'Stan surowy 2. piętro: zbrojenie stropu odebrane',
+      'Instalacje: piony szybu zachodniego ułożone',
+    ],
+    bmTrades: [
+      'Roboty ziemne i fundamenty',
+      'Konstrukcja i mury',
+      'Okna i elewacja',
+      'HVAC i elektryka',
+    ],
+    bmChecks: [
+      'Drzwi przeciwpożarowe T30 parter',
+      'Wilgotność jastrychu < 2,0%',
+      'Balustrady balkonowe 2. piętro',
+    ],
+    bmSiteLine: 'Budowa: Kwartał Północ · Tydz. 47',
+    bmCrewLabel: 'Ekipa na budowie:',
+    bmNotePlaceholder: 'Wpis do dziennika budowy...',
+    bmWorkersUnit: 'osób',
+    bmProgressLabel: 'Postęp według branż',
+    bmInspectLabel: 'Lista odbiorowa',
+    bmPassed: 'Zatwierdzone',
+    bmPending: 'Sprawdź',
+    bmNavDiary: 'Dziennik',
+    bmNavTrades: 'Branże',
+    bmNavInspect: 'Odbiór',
+    tgQuoteBtn: 'Generuj wycenę AI',
+    tgQuoteReply:
+      'Szybka wycena #ANG-741 gotowa:\n· Pakiet: n8n + Telegram Bot\n· Realizacja: 10 dni roboczych\n· Hosting: Hetzner DE (RODO)',
+    tgVoiceBtn: 'Notatka głosowa → Zadanie',
+    tgVoiceReply:
+      'Transkrypcja Whisper (0:05):\n"Zatwierdzić fakturę 842 dla Nordmetall."\n→ Zadanie utworzone w PocketBase i Jira.',
+    tgMsgPlaceholder: 'Napisz do bota...',
+  },
+  sq: {
+    interestedNote: 'Interes për aplikacionin referues',
+    tgInit:
+      'Përshëndetje! Unë jam Vision AI Telegram Bot. Klikoni një veprim të shpejtë ose më shkruani direkt.',
+    tgCustomReply: (text) =>
+      `Analiza AI përfundoi:\n"${text}" u klasifikua dhe u ruajt si proces #VIS-209 në CRM.`,
+    hmTasks: [
+      'Kontrollo presionin e kaldajës Bodrumi B',
+      'Zëvendëso ndriçimin LED në katin përdhes',
+      'Mirëmbajtja e detektorit të tymit Kati 3',
+    ],
+    hmTodayTasks: 'Detyrat e sotme të inspektimit',
+    hmLogMeter: 'Regjistro matësin',
+    hmSaveReading: 'Ruaj leximin',
+    hmReportDefect: 'Raporto defektin e objektit',
+    hmDescPlaceholder: 'Përshkrim i shkurtër...',
+    hmSubmitTicket: 'Dërgo te administrata',
+    hmStatusNew: 'E re',
+    hmStatusOpen: 'Hapur',
+    hmNavTasks: 'Detyrat',
+    hmNavMeters: 'Matësit',
+    hmNavDefects: 'Defektet',
+    bmLogs: [
+      'Karabina Kati 2: armatura e pllakës u miratua',
+      'Instalimet: kolonat e pusit perëndimor u vendosën',
+    ],
+    bmTrades: [
+      'Punime dheu & Themele',
+      'Struktura & Muratura',
+      'Dritare & Fasadë',
+      'Ngrohje / Ventilim / Elektrike',
+    ],
+    bmChecks: [
+      'Dyer kundër zjarrit T30 kati përdhes',
+      'Lagështia e shatrit < 2,0 %',
+      'Kangjellat e sigurisë ballkoni kati 2',
+    ],
+    bmSiteLine: 'Kantieri: Kvartieri Veri · Java 47',
+    bmCrewLabel: 'Ekipi në terren:',
+    bmNotePlaceholder: 'Shënim në ditarin e kantierit...',
+    bmWorkersUnit: 'punëtorë',
+    bmProgressLabel: 'Ecuria sipas fazave',
+    bmInspectLabel: 'Lista e pranimit teknik',
+    bmPassed: 'Miratuar',
+    bmPending: 'Kontrollo',
+    bmNavDiary: 'Ditari',
+    bmNavTrades: 'Punimet',
+    bmNavInspect: 'Inspektimi',
+    tgQuoteBtn: 'Gjenero Ofertë AI',
+    tgQuoteReply:
+      'Oferta e shpejtë #ANG-741 u krijua:\n· Paketa: n8n + Telegram Bot\n· Dorëzimi: 10 ditë pune\n· Hostimi: Hetzner DE (GDPR)',
+    tgVoiceBtn: 'Shënim zanor → Detyrë',
+    tgVoiceReply:
+      'Transkriptimi Whisper (0:05):\n"Mirato faturën 842 për Nordmetall."\n→ Detyra u krijua në PocketBase & Jira.',
+    tgMsgPlaceholder: 'Shkruaj botit...',
+  },
+};
+
+const KRAFTBRUDER_LOGIN_COPY: Record<
+  Language,
+  {
+    title: string;
+    emailLabel: string;
+    passwordLabel: string;
+    copied: string;
+    hintPrefix: string;
+  }
+> = {
+  de: {
+    title: 'Demo-Zugangsdaten zum Einloggen & Testen',
+    emailLabel: 'E-Mail',
+    passwordLabel: 'Passwort',
+    copied: 'Kopiert',
+    hintPrefix: 'Test-Login',
+  },
+  en: {
+    title: 'Demo Login Credentials to Sign In & Test',
+    emailLabel: 'Email',
+    passwordLabel: 'Password',
+    copied: 'Copied',
+    hintPrefix: 'Test login',
+  },
+  hr: {
+    title: 'Demo podaci za prijavu i testiranje',
+    emailLabel: 'E-pošta',
+    passwordLabel: 'Lozinka',
+    copied: 'Kopirano',
+    hintPrefix: 'Test prijava',
+  },
+  ru: {
+    title: 'Демо-данные для входа и тестирования',
+    emailLabel: 'E-mail',
+    passwordLabel: 'Пароль',
+    copied: 'Скопировано',
+    hintPrefix: 'Тест-вход',
+  },
+  tr: {
+    title: 'Giriş Yapmak ve Test Etmek için Demo Bilgileri',
+    emailLabel: 'E-posta',
+    passwordLabel: 'Şifre',
+    copied: 'Kopyalandı',
+    hintPrefix: 'Test girişi',
+  },
+  pl: {
+    title: 'Dane logowania demo do testowania aplikacji',
+    emailLabel: 'E-mail',
+    passwordLabel: 'Hasło',
+    copied: 'Skopiowano',
+    hintPrefix: 'Login testowy',
+  },
+  sq: {
+    title: 'Të dhënat demo për hyrje dhe testim',
+    emailLabel: 'Email',
+    passwordLabel: 'Fjalëkalimi',
+    copied: 'U kopjua',
+    hintPrefix: 'Hyrje test',
+  },
 };
 
 export function MobileProjectsShowcase({
@@ -45,7 +542,7 @@ export function MobileProjectsShowcase({
   t,
   onApplyToLeadModal,
 }: MobileProjectsShowcaseProps) {
-  const isDE = lang === 'de';
+  const ui = SHOWCASE_UI[lang];
   const [selectedProject, setSelectedProject] =
     useState<MobileProjectId>('hausmeister');
 
@@ -54,20 +551,25 @@ export function MobileProjectsShowcase({
   const [hmProperty, setHmProperty] = useState<'Wohnpark Mitte' | 'Gewerbepark Süd'>(
     'Wohnpark Mitte'
   );
-  const [hmTasks, setHmTasks] = useState([
-    { id: 't1', titleDE: 'Heizungsdruck Keller B prüfen', titleEN: 'Check boiler pressure Basement B', unit: 'Haus 2', done: true },
-    { id: 't2', titleDE: 'LED-Strahler Treppenhaus EG', titleEN: 'Replace hallway LED ground floor', unit: 'Haus 1', done: false },
-    { id: 't3', titleDE: 'Rauchwarnmelder Wartung OG 3', titleEN: 'Smoke detector check 3rd floor', unit: 'Haus 2', done: false },
-  ]);
+  const [hmTaskDone, setHmTaskDone] = useState<Record<string, boolean>>({
+    t1: true,
+    t2: false,
+    t3: false,
+  });
+  const hmTasks = [
+    { id: 't1', title: ui.hmTasks[0], unit: 'Haus 2', done: !!hmTaskDone.t1 },
+    { id: 't2', title: ui.hmTasks[1], unit: 'Haus 1', done: !!hmTaskDone.t2 },
+    { id: 't3', title: ui.hmTasks[2], unit: 'Haus 2', done: !!hmTaskDone.t3 },
+  ];
   const [meterType, setMeterType] = useState<'Strom' | 'Wasser' | 'Gas'>('Strom');
   const [meterValue, setMeterValue] = useState('48219');
   const [meterLogs, setMeterLogs] = useState([
-    { type: 'Strom', value: '48190 kWh', time: 'Heute 08:15' },
+    { type: 'Strom', value: '48190 kWh', time: '08:15' },
   ]);
   const [defectCategory, setDefectCategory] = useState('Sanitär');
   const [defectNote, setDefectNote] = useState('');
   const [defectList, setDefectList] = useState([
-    { id: 'd1', category: 'Schloss', note: 'Hoftor Zylinder klemmt', status: 'Offen' },
+    { id: 'd1', category: 'Schloss', note: 'Hoftor Zylinder klemmt', status: ui.hmStatusOpen },
   ]);
 
   // 1b. HausmeisterPro live embed mode & refresh key
@@ -83,48 +585,62 @@ export function MobileProjectsShowcase({
   const [bmTab, setBmTab] = useState<'diary' | 'trades' | 'inspect'>('diary');
   const [bmCrewCount, setBmCrewCount] = useState(9);
   const [bmNoteInput, setBmNoteInput] = useState('');
-  const [bmLogs, setBmLogs] = useState([
-    {
-      id: 'l1',
-      time: '09:30',
-      crew: 6,
-      textDE: 'Rohbau OG 2: Deckenbewehrung abgenommen',
-      textEN: '2nd floor shell: slab rebar approved',
-    },
-    {
-      id: 'l2',
-      time: '11:15',
-      crew: 3,
-      textDE: 'TGA: Steigleitungen Schacht West verlegt',
-      textEN: 'MEP: West shaft risers installed',
-    },
-  ]);
-  const [bmTrades, setBmTrades] = useState([
-    { id: 'tr1', nameDE: 'Erdarbeiten & Fundament', nameEN: 'Earthworks & Foundation', pct: 100 },
-    { id: 'tr2', nameDE: 'Rohbau & Mauerwerk', nameEN: 'Structural Shell', pct: 80 },
-    { id: 'tr3', nameDE: 'Fenster & Fassade', nameEN: 'Windows & Facade', pct: 45 },
-    { id: 'tr4', nameDE: 'Heizung / Lüftung / Elektro', nameEN: 'HVAC & Electrical', pct: 30 },
-  ]);
-  const [bmChecks, setBmChecks] = useState([
-    { id: 'c1', labelDE: 'Brandschutztüren T30 EG', labelEN: 'Fire doors T30 ground floor', ok: true },
-    { id: 'c2', labelDE: 'Estrich Restfeuchte < 2,0 %', labelEN: 'Screed moisture < 2.0%', ok: false },
-    { id: 'c3', labelDE: 'Absturzsicherung Balkon OG 2', labelEN: 'Balcony safety rail 2nd floor', ok: true },
-  ]);
+  const [bmCustomLogs, setBmCustomLogs] = useState<
+    Array<{ id: string; time: string; crew: number; text: string }>
+  >([]);
+  const bmLogs = [
+    ...bmCustomLogs,
+    { id: 'l1', time: '09:30', crew: 6, text: ui.bmLogs[0] },
+    { id: 'l2', time: '11:15', crew: 3, text: ui.bmLogs[1] },
+  ];
+  const [bmTradePct, setBmTradePct] = useState<Record<string, number>>({
+    tr1: 100,
+    tr2: 80,
+    tr3: 45,
+    tr4: 30,
+  });
+  const bmTrades = [
+    { id: 'tr1', name: ui.bmTrades[0], pct: bmTradePct.tr1 },
+    { id: 'tr2', name: ui.bmTrades[1], pct: bmTradePct.tr2 },
+    { id: 'tr3', name: ui.bmTrades[2], pct: bmTradePct.tr3 },
+    { id: 'tr4', name: ui.bmTrades[3], pct: bmTradePct.tr4 },
+  ];
+  const [bmCheckOk, setBmCheckOk] = useState<Record<string, boolean>>({
+    c1: true,
+    c2: false,
+    c3: true,
+  });
+  const bmChecks = [
+    { id: 'c1', label: ui.bmChecks[0], ok: bmCheckOk.c1 },
+    { id: 'c2', label: ui.bmChecks[1], ok: bmCheckOk.c2 },
+    { id: 'c3', label: ui.bmChecks[2], ok: bmCheckOk.c3 },
+  ];
 
   // 4. Vision Ki Telegram Bot state
   const [tgInput, setTgInput] = useState('');
   const [tgMessages, setTgMessages] = useState<
     Array<{ id: string; sender: 'bot' | 'user'; text: string; time: string }>
-  >([
-    {
-      id: 'tg-0',
-      sender: 'bot',
-      time: '10:02',
-      text: isDE
-        ? 'Hallo! Ich bin der Vision KI Telegram Bot. Tippen Sie auf eine Schnellaktion oder schreiben Sie mir direkt.'
-        : 'Hello! I am the Vision AI Telegram Bot. Tap a quick action below or send me a message.',
-    },
-  ]);
+  >([]);
+
+  // 5. Kraftbruder Hausmeister App iframe refresh key & credential copy state
+  const [kbIframeKey, setKbIframeKey] = useState(0);
+  const [copiedField, setCopiedField] = useState<'email' | 'password' | null>(null);
+  const kbLoginCopy = KRAFTBRUDER_LOGIN_COPY[lang];
+
+  const handleCopyCredential = (field: 'email' | 'password', value: string) => {
+    if (typeof navigator !== 'undefined' && navigator.clipboard) {
+      void navigator.clipboard.writeText(value);
+    }
+    setCopiedField(field);
+    window.setTimeout(() => {
+      setCopiedField((prev) => (prev === field ? null : prev));
+    }, 1800);
+  };
+
+  const renderedTgMessages = [
+    { id: 'tg-0', sender: 'bot' as const, time: '10:02', text: ui.tgInit },
+    ...tgMessages,
+  ];
 
   const activeProjectMeta = t.projects.find((p) => p.id === selectedProject)!;
 
@@ -133,9 +649,10 @@ export function MobileProjectsShowcase({
     nataly_beauty: Sparkles,
     baumeister: HardHat,
     vision_tg: Bot,
+    kraftbruder: Building2,
   };
 
-  const handleTgAction = (label: string, replyDE: string, replyEN: string) => {
+  const handleTgAction = (label: string, replyText: string) => {
     const time = new Date().toLocaleTimeString('de-DE', {
       hour: '2-digit',
       minute: '2-digit',
@@ -146,7 +663,7 @@ export function MobileProjectsShowcase({
       {
         id: `b-${Date.now() + 1}`,
         sender: 'bot',
-        text: isDE ? replyDE : replyEN,
+        text: replyText,
         time,
       },
     ]);
@@ -157,11 +674,7 @@ export function MobileProjectsShowcase({
     const text = tgInput.trim();
     if (!text) return;
     setTgInput('');
-    handleTgAction(
-      text,
-      `KI-Analyse abgeschlossen:\n"${text}" wurde klassifiziert und als Workflow-Vorgang #VIS-209 im CRM vorgemerkt.`,
-      `AI analysis completed:\n"${text}" was classified and logged as workflow item #VIS-209 in CRM.`
-    );
+    handleTgAction(text, ui.tgCustomReply(text));
   };
 
   const completedTasks = hmTasks.filter((item) => item.done).length;
@@ -236,6 +749,70 @@ export function MobileProjectsShowcase({
               {activeProjectMeta.fullDesc}
             </p>
 
+            {(selectedProject === 'hausmeister' ||
+              selectedProject === 'baumeister' ||
+              selectedProject === 'kraftbruder') && (
+              <div className="mt-4 rounded-lg border border-cyan-400/30 bg-[#090d16] p-3.5">
+                <div className="flex items-center gap-2 text-xs font-semibold text-cyan-300">
+                  <KeyRound className="h-3.5 w-3.5 shrink-0" />
+                  <span>{kbLoginCopy.title}</span>
+                </div>
+                <div className="mt-2.5 grid grid-cols-1 gap-2 sm:grid-cols-2">
+                  <div className="flex items-center justify-between gap-2 rounded-md border border-white/[0.08] bg-[#111827] px-2.5 py-1.5">
+                    <div className="min-w-0">
+                      <div className="text-[10px] uppercase tracking-wider text-slate-400">
+                        {kbLoginCopy.emailLabel}
+                      </div>
+                      <div className="truncate font-mono text-xs font-medium text-white">
+                        demo@vision-it.de
+                      </div>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => handleCopyCredential('email', 'demo@vision-it.de')}
+                      aria-label={kbLoginCopy.emailLabel}
+                      className="inline-flex shrink-0 items-center gap-1 rounded border border-white/[0.1] bg-white/[0.04] px-2 py-1 text-[10px] font-medium text-cyan-300 hover:border-cyan-400/40 hover:bg-cyan-500/10 cursor-pointer"
+                    >
+                      {copiedField === 'email' ? (
+                        <>
+                          <Check className="h-3 w-3 text-emerald-400" />
+                          <span className="text-emerald-300">{kbLoginCopy.copied}</span>
+                        </>
+                      ) : (
+                        <Copy className="h-3 w-3" />
+                      )}
+                    </button>
+                  </div>
+
+                  <div className="flex items-center justify-between gap-2 rounded-md border border-white/[0.08] bg-[#111827] px-2.5 py-1.5">
+                    <div className="min-w-0">
+                      <div className="text-[10px] uppercase tracking-wider text-slate-400">
+                        {kbLoginCopy.passwordLabel}
+                      </div>
+                      <div className="truncate font-mono text-xs font-medium text-white">
+                        12345678
+                      </div>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => handleCopyCredential('password', '12345678')}
+                      aria-label={kbLoginCopy.passwordLabel}
+                      className="inline-flex shrink-0 items-center gap-1 rounded border border-white/[0.1] bg-white/[0.04] px-2 py-1 text-[10px] font-medium text-cyan-300 hover:border-cyan-400/40 hover:bg-cyan-500/10 cursor-pointer"
+                    >
+                      {copiedField === 'password' ? (
+                        <>
+                          <Check className="h-3 w-3 text-emerald-400" />
+                          <span className="text-emerald-300">{kbLoginCopy.copied}</span>
+                        </>
+                      ) : (
+                        <Copy className="h-3 w-3" />
+                      )}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
             <ul className="mt-4 space-y-2 border-t border-white/[0.06] pt-4 text-xs text-slate-300">
               {activeProjectMeta.highlights.map((item) => (
                 <li key={item} className="flex items-center gap-2">
@@ -251,7 +828,7 @@ export function MobileProjectsShowcase({
                 onClick={() =>
                   onApplyToLeadModal({
                     services: PROJECT_SERVICES[selectedProject],
-                    notes: `${isDE ? 'Interesse an Projekt-Referenz' : 'Interested in reference app'}: ${activeProjectMeta.name}`,
+                    notes: `${ui.interestedNote}: ${activeProjectMeta.name}`,
                     sourceModule: 'apps_roi',
                   })
                 }
@@ -269,6 +846,8 @@ export function MobileProjectsShowcase({
                     ? 'https://lucent-kashata-59eb70.netlify.app/'
                     : selectedProject === 'baumeister'
                     ? 'https://bauapp.vision-it-systems.de'
+                    : selectedProject === 'kraftbruder'
+                    ? 'https://app.vision-it-systems.de'
                     : 'https://t.me/VisionITsystems_bot'
                 }
                 target="_blank"
@@ -277,9 +856,7 @@ export function MobileProjectsShowcase({
               >
                 <span>
                   {selectedProject === 'vision_tg'
-                    ? isDE
-                      ? 'In Telegram öffnen'
-                      : 'Open in Telegram'
+                    ? t.openTelegram
                     : t.openExternal}
                 </span>
                 <ExternalLink className="h-3.5 w-3.5 text-cyan-400" />
@@ -352,16 +929,33 @@ export function MobileProjectsShowcase({
                   </div>
 
                   {hmMode === 'live' ? (
-                    <div className="relative flex-1 bg-white">
-                      <iframe
-                        key={hmIframeKey}
-                        src="https://hausmeister.pro.vision-it-systems.de/"
-                        title="HausmeisterPro App Live Mobile Preview"
-                        className="h-full w-full border-0"
-                        loading="lazy"
-                        sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
-                      />
-                    </div>
+                    <>
+                      {/* Compact Demo Credential Hint Strip */}
+                      <div className="flex items-center justify-between gap-2 border-b border-white/[0.08] bg-[#090d16] px-3 py-1.5 text-[10px]">
+                        <span className="truncate font-mono text-slate-300">
+                          <span className="text-cyan-300">{kbLoginCopy.hintPrefix}:</span>{' '}
+                          demo@vision-it.de / 12345678
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => handleCopyCredential('email', 'demo@vision-it.de')}
+                          className="shrink-0 font-medium text-cyan-300 hover:text-cyan-200 cursor-pointer"
+                        >
+                          {copiedField === 'email' ? kbLoginCopy.copied : 'Copy'}
+                        </button>
+                      </div>
+
+                      <div className="relative flex-1 bg-white">
+                        <iframe
+                          key={hmIframeKey}
+                          src="https://hausmeister.pro.vision-it-systems.de/"
+                          title="HausmeisterPro App Live Mobile Preview"
+                          className="h-full w-full border-0"
+                          loading="lazy"
+                          sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+                        />
+                      </div>
+                    </>
                   ) : (
                     <>
                   {/* App Top Bar */}
@@ -395,18 +989,17 @@ export function MobileProjectsShowcase({
                     {hmTab === 'tasks' && (
                       <>
                         <div className="text-[11px] font-medium text-slate-400">
-                          {isDE ? 'Heutige Rundgang-Aufgaben' : 'Today’s Facility Tasks'} · {hmProperty}
+                          {ui.hmTodayTasks} · {hmProperty}
                         </div>
                         {hmTasks.map((task) => (
                           <button
                             key={task.id}
                             type="button"
                             onClick={() =>
-                              setHmTasks((prev) =>
-                                prev.map((it) =>
-                                  it.id === task.id ? { ...it, done: !it.done } : it
-                                )
-                              )
+                              setHmTaskDone((prev) => ({
+                                ...prev,
+                                [task.id]: !prev[task.id],
+                              }))
                             }
                             className={`flex w-full items-start gap-3 rounded-xl border p-3 text-left transition-colors cursor-pointer ${
                               task.done
@@ -429,7 +1022,7 @@ export function MobileProjectsShowcase({
                                   task.done ? 'line-through text-slate-400' : 'text-white'
                                 }`}
                               >
-                                {isDE ? task.titleDE : task.titleEN}
+                                {task.title}
                               </div>
                               <div className="mt-0.5 text-[11px] text-slate-400">
                                 {task.unit}
@@ -443,7 +1036,7 @@ export function MobileProjectsShowcase({
                     {hmTab === 'meters' && (
                       <div className="space-y-3">
                         <div className="text-[11px] font-medium text-slate-400">
-                          {isDE ? 'Zählerstand erfassen' : 'Log Meter Reading'}
+                          {ui.hmLogMeter}
                         </div>
                         <div className="rounded-xl border border-white/[0.08] bg-[#141e33] p-3 space-y-2.5">
                           <div className="flex gap-1.5">
@@ -488,7 +1081,7 @@ export function MobileProjectsShowcase({
                             }}
                             className="w-full rounded-lg bg-cyan-500 py-2 text-xs font-semibold text-slate-950 hover:bg-cyan-400 cursor-pointer"
                           >
-                            {isDE ? 'Zählerstand speichern' : 'Save Reading'}
+                            {ui.hmSaveReading}
                           </button>
                         </div>
 
@@ -510,7 +1103,7 @@ export function MobileProjectsShowcase({
                     {hmTab === 'defects' && (
                       <div className="space-y-3">
                         <div className="text-[11px] font-medium text-slate-400">
-                          {isDE ? 'Mängelmeldung erfassen' : 'Report Property Defect'}
+                          {ui.hmReportDefect}
                         </div>
                         <div className="rounded-xl border border-white/[0.08] bg-[#141e33] p-3 space-y-2.5">
                           <select
@@ -526,7 +1119,7 @@ export function MobileProjectsShowcase({
                             type="text"
                             value={defectNote}
                             onChange={(e) => setDefectNote(e.target.value)}
-                            placeholder={isDE ? 'Kurzbeschreibung...' : 'Short description...'}
+                            placeholder={ui.hmDescPlaceholder}
                             className="w-full rounded-lg border border-white/[0.1] bg-[#090d16] px-3 py-2 text-xs text-white placeholder:text-slate-500 focus:border-cyan-400 focus:outline-none"
                           />
                           <button
@@ -538,7 +1131,7 @@ export function MobileProjectsShowcase({
                                   id: `d-${Date.now()}`,
                                   category: defectCategory,
                                   note: defectNote.trim(),
-                                  status: isDE ? 'Neu' : 'New',
+                                  status: ui.hmStatusNew,
                                 },
                                 ...prev,
                               ]);
@@ -546,7 +1139,7 @@ export function MobileProjectsShowcase({
                             }}
                             className="w-full rounded-lg bg-cyan-500 py-2 text-xs font-semibold text-slate-950 hover:bg-cyan-400 cursor-pointer"
                           >
-                            {isDE ? 'Ticket an Verwaltung senden' : 'Submit Ticket'}
+                            {ui.hmSubmitTicket}
                           </button>
                         </div>
 
@@ -578,7 +1171,7 @@ export function MobileProjectsShowcase({
                       }`}
                     >
                       <ClipboardCheck className="h-4 w-4" />
-                      <span>{isDE ? 'Aufträge' : 'Tasks'}</span>
+                      <span>{ui.hmNavTasks}</span>
                     </button>
                     <button
                       type="button"
@@ -588,7 +1181,7 @@ export function MobileProjectsShowcase({
                       }`}
                     >
                       <Gauge className="h-4 w-4" />
-                      <span>{isDE ? 'Zähler' : 'Meters'}</span>
+                      <span>{ui.hmNavMeters}</span>
                     </button>
                     <button
                       type="button"
@@ -598,7 +1191,7 @@ export function MobileProjectsShowcase({
                       }`}
                     >
                       <Building2 className="h-4 w-4" />
-                      <span>{isDE ? 'Mängel' : 'Defects'}</span>
+                      <span>{ui.hmNavDefects}</span>
                     </button>
                   </div>
                     </>
@@ -699,16 +1292,33 @@ export function MobileProjectsShowcase({
                   </div>
 
                   {bmMode === 'live' ? (
-                    <div className="relative flex-1 bg-white">
-                      <iframe
-                        key={bmIframeKey}
-                        src="https://bauapp.vision-it-systems.de"
-                        title="Baumeister Pro App Live Mobile Preview"
-                        className="h-full w-full border-0"
-                        loading="lazy"
-                        sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
-                      />
-                    </div>
+                    <>
+                      {/* Compact Demo Credential Hint Strip */}
+                      <div className="flex items-center justify-between gap-2 border-b border-white/[0.08] bg-[#090d16] px-3 py-1.5 text-[10px]">
+                        <span className="truncate font-mono text-slate-300">
+                          <span className="text-amber-300">{kbLoginCopy.hintPrefix}:</span>{' '}
+                          demo@vision-it.de / 12345678
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => handleCopyCredential('email', 'demo@vision-it.de')}
+                          className="shrink-0 font-medium text-amber-300 hover:text-amber-200 cursor-pointer"
+                        >
+                          {copiedField === 'email' ? kbLoginCopy.copied : 'Copy'}
+                        </button>
+                      </div>
+
+                      <div className="relative flex-1 bg-white">
+                        <iframe
+                          key={bmIframeKey}
+                          src="https://bauapp.vision-it-systems.de"
+                          title="Baumeister Pro App Live Mobile Preview"
+                          className="h-full w-full border-0"
+                          loading="lazy"
+                          sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+                        />
+                      </div>
+                    </>
                   ) : (
                     <>
                   {/* Header */}
@@ -723,7 +1333,7 @@ export function MobileProjectsShowcase({
                       <span className="font-mono text-[11px] text-slate-300">8°C · Trocken</span>
                     </div>
                     <div className="mt-1 text-[11px] text-slate-400">
-                      {isDE ? 'Baustelle: Quartier Nord · KW 47' : 'Site: North Quarter · W47'}
+                      {ui.bmSiteLine}
                     </div>
                   </div>
 
@@ -733,7 +1343,7 @@ export function MobileProjectsShowcase({
                       <>
                         <div className="rounded-xl border border-white/[0.08] bg-[#141e33] p-3 space-y-2">
                           <div className="flex items-center justify-between text-xs text-slate-300">
-                            <span>{isDE ? 'Fachkräfte vor Ort:' : 'Crew on site:'}</span>
+                            <span>{ui.bmCrewLabel}</span>
                             <div className="flex items-center gap-2">
                               <button
                                 type="button"
@@ -759,16 +1369,14 @@ export function MobileProjectsShowcase({
                               type="text"
                               value={bmNoteInput}
                               onChange={(e) => setBmNoteInput(e.target.value)}
-                              placeholder={
-                                isDE ? 'Bautagebuch-Eintrag...' : 'Daily site note...'
-                              }
+                              placeholder={ui.bmNotePlaceholder}
                               className="flex-1 rounded-lg border border-white/[0.1] bg-[#090d16] px-2.5 py-1.5 text-xs text-white placeholder:text-slate-500 focus:border-cyan-400 focus:outline-none"
                             />
                             <button
                               type="button"
                               onClick={() => {
                                 if (!bmNoteInput.trim()) return;
-                                setBmLogs((prev) => [
+                                setBmCustomLogs((prev) => [
                                   {
                                     id: `l-${Date.now()}`,
                                     time: new Date().toLocaleTimeString('de-DE', {
@@ -776,8 +1384,7 @@ export function MobileProjectsShowcase({
                                       minute: '2-digit',
                                     }),
                                     crew: bmCrewCount,
-                                    textDE: bmNoteInput.trim(),
-                                    textEN: bmNoteInput.trim(),
+                                    text: bmNoteInput.trim(),
                                   },
                                   ...prev,
                                 ]);
@@ -799,11 +1406,11 @@ export function MobileProjectsShowcase({
                               <div className="flex justify-between text-[11px] text-slate-400">
                                 <span className="font-mono">{log.time}</span>
                                 <span className="text-amber-300">
-                                  {log.crew} {isDE ? 'Personen' : 'workers'}
+                                  {log.crew} {ui.bmWorkersUnit}
                                 </span>
                               </div>
                               <p className="mt-1 text-slate-200">
-                                {isDE ? log.textDE : log.textEN}
+                                {log.text}
                               </p>
                             </div>
                           ))}
@@ -814,7 +1421,7 @@ export function MobileProjectsShowcase({
                     {bmTab === 'trades' && (
                       <div className="space-y-3">
                         <div className="text-[11px] font-medium text-slate-400">
-                          {isDE ? 'Baufortschritt nach Gewerk' : 'Progress by Trade'}
+                          {ui.bmProgressLabel}
                         </div>
                         {bmTrades.map((trade) => (
                           <div
@@ -823,7 +1430,7 @@ export function MobileProjectsShowcase({
                           >
                             <div className="flex items-center justify-between text-xs">
                               <span className="font-medium text-white">
-                                {isDE ? trade.nameDE : trade.nameEN}
+                                {trade.name}
                               </span>
                               <div className="flex items-center gap-2">
                                 <span className="font-mono text-amber-300 tabular-nums">
@@ -833,13 +1440,10 @@ export function MobileProjectsShowcase({
                                   <button
                                     type="button"
                                     onClick={() =>
-                                      setBmTrades((prev) =>
-                                        prev.map((tr) =>
-                                          tr.id === trade.id
-                                            ? { ...tr, pct: Math.min(100, tr.pct + 5) }
-                                            : tr
-                                        )
-                                      )
+                                      setBmTradePct((prev) => ({
+                                        ...prev,
+                                        [trade.id]: Math.min(100, (prev[trade.id] || 0) + 5),
+                                      }))
                                     }
                                     className="rounded bg-[#090d16] px-1.5 py-0.5 text-[10px] text-cyan-300 hover:bg-cyan-500/20 cursor-pointer"
                                   >
@@ -862,36 +1466,29 @@ export function MobileProjectsShowcase({
                     {bmTab === 'inspect' && (
                       <div className="space-y-2.5">
                         <div className="text-[11px] font-medium text-slate-400">
-                          {isDE ? 'Abnahme-Checkliste' : 'Site Inspection Checklist'}
+                          {ui.bmInspectLabel}
                         </div>
                         {bmChecks.map((check) => (
                           <button
                             key={check.id}
                             type="button"
                             onClick={() =>
-                              setBmChecks((prev) =>
-                                prev.map((item) =>
-                                  item.id === check.id ? { ...item, ok: !item.ok } : item
-                                )
-                              )
+                              setBmCheckOk((prev) => ({
+                                ...prev,
+                                [check.id]: !prev[check.id],
+                              }))
                             }
                             className="flex w-full items-center justify-between rounded-xl border border-white/[0.08] bg-[#141e33] p-3 text-left text-xs cursor-pointer"
                           >
                             <span className="text-slate-200">
-                              {isDE ? check.labelDE : check.labelEN}
+                              {check.label}
                             </span>
                             <span
                               className={`font-semibold ${
                                 check.ok ? 'text-emerald-400' : 'text-amber-300'
                               }`}
                             >
-                              {check.ok
-                                ? isDE
-                                  ? 'Freigegeben'
-                                  : 'Passed'
-                                : isDE
-                                ? 'Prüfen'
-                                : 'Pending'}
+                              {check.ok ? ui.bmPassed : ui.bmPending}
                             </span>
                           </button>
                         ))}
@@ -909,7 +1506,7 @@ export function MobileProjectsShowcase({
                       }`}
                     >
                       <ClipboardCheck className="h-4 w-4" />
-                      <span>{isDE ? 'Bautagebuch' : 'Site Diary'}</span>
+                      <span>{ui.bmNavDiary}</span>
                     </button>
                     <button
                       type="button"
@@ -919,7 +1516,7 @@ export function MobileProjectsShowcase({
                       }`}
                     >
                       <Hammer className="h-4 w-4" />
-                      <span>{isDE ? 'Gewerke' : 'Trades'}</span>
+                      <span>{ui.bmNavTrades}</span>
                     </button>
                     <button
                       type="button"
@@ -929,7 +1526,7 @@ export function MobileProjectsShowcase({
                       }`}
                     >
                       <Check className="h-4 w-4" />
-                      <span>{isDE ? 'Abnahme' : 'Inspect'}</span>
+                      <span>{ui.bmNavInspect}</span>
                     </button>
                   </div>
                     </>
@@ -966,7 +1563,7 @@ export function MobileProjectsShowcase({
 
                   {/* Chat Feed */}
                   <div className="flex-1 space-y-2.5 overflow-y-auto p-3">
-                    {tgMessages.map((msg) => (
+                    {renderedTgMessages.map((msg) => (
                       <div
                         key={msg.id}
                         className={`flex flex-col ${
@@ -996,29 +1593,21 @@ export function MobileProjectsShowcase({
                       <button
                         type="button"
                         onClick={() =>
-                          handleTgAction(
-                            isDE ? 'KI-Angebot generieren' : 'Generate AI Quote',
-                            'Sofort-Kalkulation #ANG-741 erstellt:\n· Paket: n8n + Telegram Bot\n· Lieferzeit: 10 Werktage\n· Hosting: Hetzner DE (DSGVO)',
-                            'Instant Quote #ANG-741 created:\n· Package: n8n + Telegram Bot\n· Delivery: 10 business days\n· Hosting: Hetzner DE (GDPR)'
-                          )
+                          handleTgAction(ui.tgQuoteBtn, ui.tgQuoteReply)
                         }
                         className="rounded-lg border border-cyan-400/25 bg-[#1d2d3e] px-3 py-1.5 text-xs font-medium text-cyan-200 hover:bg-cyan-500/20 cursor-pointer"
                       >
-                        {isDE ? 'KI-Angebot generieren' : 'Generate AI Quote'}
+                        {ui.tgQuoteBtn}
                       </button>
                       <button
                         type="button"
                         onClick={() =>
-                          handleTgAction(
-                            isDE ? 'Sprachnotiz → Aufgabe' : 'Voice Note → Task',
-                            'Whisper Transkription (0:05):\n"Rechnung 842 für Nordmetall freigeben."\n→ Aufgabe in PocketBase & Jira angelegt.',
-                            'Whisper Transcript (0:05):\n"Approve invoice 842 for Nordmetall."\n→ Task created in PocketBase & Jira.'
-                          )
+                          handleTgAction(ui.tgVoiceBtn, ui.tgVoiceReply)
                         }
                         className="inline-flex items-center justify-center gap-1.5 rounded-lg border border-cyan-400/25 bg-[#1d2d3e] px-3 py-1.5 text-xs font-medium text-cyan-200 hover:bg-cyan-500/20 cursor-pointer"
                       >
                         <Mic className="h-3.5 w-3.5" />
-                        <span>{isDE ? 'Sprachnotiz → Aufgabe' : 'Voice Note → Task'}</span>
+                        <span>{ui.tgVoiceBtn}</span>
                       </button>
                     </div>
                   </div>
@@ -1033,7 +1622,7 @@ export function MobileProjectsShowcase({
                       type="text"
                       value={tgInput}
                       onChange={(e) => setTgInput(e.target.value)}
-                      placeholder={isDE ? 'Nachricht an Bot...' : 'Message bot...'}
+                      placeholder={ui.tgMsgPlaceholder}
                       className="flex-1 bg-transparent text-xs text-white placeholder:text-slate-500 focus:outline-none"
                     />
                     <button
@@ -1044,6 +1633,62 @@ export function MobileProjectsShowcase({
                       <Send className="h-3.5 w-3.5" />
                     </button>
                   </form>
+                </div>
+              )}
+
+              {/* 5. KRAFTBRUDER HAUSMEISTER APP (REAL LIVE IFRAME EMBED) */}
+              {selectedProject === 'kraftbruder' && (
+                <div className="flex flex-1 flex-col overflow-hidden bg-[#0e1524]">
+                  {/* Mobile Browser Address Bar */}
+                  <div className="flex items-center justify-between gap-2 border-b border-white/[0.08] bg-[#131d31] px-3 py-2">
+                    <div className="flex-1 truncate rounded-md border border-white/[0.08] bg-[#090d16] px-2.5 py-1 font-mono text-[10px] text-cyan-300">
+                      app.vision-it-systems.de
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setKbIframeKey((k) => k + 1)}
+                      aria-label="Reload Kraftbruder Hausmeister App"
+                      className="rounded p-1 text-slate-300 hover:bg-white/10 hover:text-white cursor-pointer"
+                    >
+                      <RefreshCw className="h-3.5 w-3.5" />
+                    </button>
+                    <a
+                      href="https://app.vision-it-systems.de"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label="Open Kraftbruder Hausmeister App in new tab"
+                      className="rounded p-1 text-slate-300 hover:bg-white/10 hover:text-white"
+                    >
+                      <ExternalLink className="h-3.5 w-3.5" />
+                    </a>
+                  </div>
+
+                  {/* Compact Demo Credential Hint Strip */}
+                  <div className="flex items-center justify-between gap-2 border-b border-white/[0.08] bg-[#090d16] px-3 py-1.5 text-[10px]">
+                    <span className="truncate font-mono text-slate-300">
+                      <span className="text-cyan-300">{kbLoginCopy.hintPrefix}:</span>{' '}
+                      demo@vision-it.de / 12345678
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => handleCopyCredential('email', 'demo@vision-it.de')}
+                      className="shrink-0 font-medium text-cyan-300 hover:text-cyan-200 cursor-pointer"
+                    >
+                      {copiedField === 'email' ? kbLoginCopy.copied : 'Copy'}
+                    </button>
+                  </div>
+
+                  {/* Embedded Live App Viewport */}
+                  <div className="relative flex-1 bg-white">
+                    <iframe
+                      key={kbIframeKey}
+                      src="https://app.vision-it-systems.de"
+                      title="Kraftbruder Hausmeister App Live Mobile Preview"
+                      className="h-full w-full border-0"
+                      loading="lazy"
+                      sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+                    />
+                  </div>
                 </div>
               )}
 

@@ -46,12 +46,132 @@ function nowTime() {
   return new Date().toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
 }
 
+interface TgFlowCopy {
+  selectOrder: string;
+  order4821: string;
+  order4904: string;
+  selectPackage: string;
+  starterLabel: string;
+  suiteLabel: string;
+  quoteResult: (isSuite: boolean) => string;
+  requestFormalQuote: string;
+  voiceTranscriptReply: string;
+}
+
+const TG_FLOW_COPY: Record<Language, TgFlowCopy> = {
+  de: {
+    selectOrder: 'Wählen Sie eine aktive Auftragsnummer aus Ihrem ERP:',
+    order4821:
+      'Auftrag #VIS-4821 (Server-Cluster Migration)\nStatus: In Auslieferung (85 %)\nStandort: Hetzner Nürnberg (DE)\nNächster Meilenstein: DNS-Cutover heute 17:00 Uhr.',
+    order4904:
+      'Auftrag #VIS-4904 (n8n CRM-Pipeline)\nStatus: Produktiv & Aktiv\nLetzter Sync: vor 4 Minuten (42 Datensätze fehlerfrei übertragen).',
+    selectPackage: 'Welches Automatisierungspaket soll kalkuliert werden?',
+    starterLabel: 'Starter Bot & n8n (ab 1.490 €)',
+    suiteLabel: 'Full AI & CRM Suite (ab 3.900 €)',
+    quoteResult: (isSuite) =>
+      `Sofort-Kalkulation erstellt:\nPaket: ${isSuite ? 'Full AI & CRM Suite' : 'Starter Bot & n8n'}\nRichtpreis: ${isSuite ? '3.900 €' : '1.490 €'} netto\nLieferzeit: ${isSuite ? '3–4 Wochen' : '7–10 Werktage'}\nInklusive: Docker-Setup auf Hetzner (DE) & AVV.`,
+    requestFormalQuote: 'Unverbindlich anfragen',
+    voiceTranscriptReply:
+      'Sprachnotiz (0:06) transkribiert:\n"Bitte für Kunde Nordmetall bis Freitag 12 Uhr das IMAP-Postfach auf dem Hetzner-Node aktivieren."\n\nAngelegte Aufgabe:\n· Projekt: Nordmetall Onboarding\n· Priorität: Hoch\n· Fällig: Freitag, 12:00 Uhr',
+  },
+  en: {
+    selectOrder: 'Select an active order ID from your ERP:',
+    order4821:
+      'Order #VIS-4821 (Server Cluster Migration)\nStatus: Deploying (85%)\nRegion: Hetzner Nuremberg (DE)\nNext milestone: DNS cutover today at 17:00 CET.',
+    order4904:
+      'Order #VIS-4904 (n8n CRM Pipeline)\nStatus: Live & Healthy\nLast sync: 4 minutes ago (42 records synced with 0 errors).',
+    selectPackage: 'Which automation package would you like to estimate?',
+    starterLabel: 'Starter Bot & n8n (from €1,490)',
+    suiteLabel: 'Full AI & CRM Suite (from €3,900)',
+    quoteResult: (isSuite) =>
+      `Instant Quote Generated:\nPackage: ${isSuite ? 'Full AI & CRM Suite' : 'Starter Bot & n8n'}\nEstimate: ${isSuite ? '€3,900' : '€1,490'} net\nDelivery: ${isSuite ? '3–4 weeks' : '7–10 business days'}\nIncludes: Hetzner Germany Docker setup & GDPR DPA.`,
+    requestFormalQuote: 'Request formal quote',
+    voiceTranscriptReply:
+      'Voice note (0:06) transcribed:\n"Please activate the IMAP mailbox on the Hetzner node for Nordmetall by Friday noon."\n\nCreated Task:\n· Project: Nordmetall Onboarding\n· Priority: High\n· Due: Friday, 12:00 CET',
+  },
+  hr: {
+    selectOrder: 'Odaberite aktivni broj naloga iz vašeg ERP-a:',
+    order4821:
+      'Nalog #VIS-4821 (Migracija poslužiteljskog klastera)\nStatus: U isporuci (85 %)\nLokacija: Hetzner Nürnberg (DE)\nSljedeći korak: DNS prebacivanje danas u 17:00.',
+    order4904:
+      'Nalog #VIS-4904 (n8n CRM cjevovod)\nStatus: Produkcijski i aktivan\nZadnja sinkronizacija: prije 4 min (42 zapisa bez grešaka).',
+    selectPackage: 'Koji paket automatizacije želite procijeniti?',
+    starterLabel: 'Starter Bot & n8n (od 1.490 €)',
+    suiteLabel: 'Full AI & CRM Suite (od 3.900 €)',
+    quoteResult: (isSuite) =>
+      `Izrađena brza ponuda:\nPaket: ${isSuite ? 'Full AI & CRM Suite' : 'Starter Bot & n8n'}\nOkvirna cijena: ${isSuite ? '3.900 €' : '1.490 €'} neto\nIsporuka: ${isSuite ? '3–4 tjedna' : '7–10 radnih dana'}\nUključeno: Hetzner DE Docker postavljanje i GDPR AVV.`,
+    requestFormalQuote: 'Zatraži neobvezujuću ponudu',
+    voiceTranscriptReply:
+      'Glasovna bilješka (0:06) transkribirana:\n"Molim aktivirati IMAP sandučić na Hetzner čvoru za klijenta Nordmetall do petka u 12 sati."\n\nKreirani zadatak:\n· Projekt: Nordmetall Onboarding\n· Prioritet: Visok\n· Rok: Petak, 12:00 CET',
+  },
+  ru: {
+    selectOrder: 'Выберите активный номер заказа из вашей ERP:',
+    order4821:
+      'Заказ #VIS-4821 (Миграция серверного кластера)\nСтатус: Развёртывание (85 %)\nРегион: Hetzner Нюрнберг (DE)\nСледующий этап: переключение DNS сегодня в 17:00 CET.',
+    order4904:
+      'Заказ #VIS-4904 (n8n CRM-конвейер)\nСтатус: В работе, без сбоев\nПоследняя синхронизация: 4 мин. назад (42 записи, 0 ошибок).',
+    selectPackage: 'Какой пакет автоматизации рассчитать?',
+    starterLabel: 'Starter Bot & n8n (от 1 490 €)',
+    suiteLabel: 'Full AI & CRM Suite (от 3 900 €)',
+    quoteResult: (isSuite) =>
+      `Мгновенный расчёт сформирован:\nПакет: ${isSuite ? 'Full AI & CRM Suite' : 'Starter Bot & n8n'}\nОриентир: ${isSuite ? '3 900 €' : '1 490 €'} нетто\nСрок: ${isSuite ? '3–4 недели' : '7–10 рабочих дней'}\nВключено: Docker на Hetzner (DE) и договор GDPR.`,
+    requestFormalQuote: 'Запросить точное КП',
+    voiceTranscriptReply:
+      'Голосовая заметка (0:06) расшифрована:\n"Активируйте, пожалуйста, IMAP-ящик на узле Hetzner для Nordmetall до пятницы 12:00."\n\nСоздана задача:\n· Проект: Nordmetall Onboarding\n· Приоритет: Высокий\n· Срок: Пятница, 12:00 CET',
+  },
+  tr: {
+    selectOrder: 'ERP sisteminizden aktif bir sipariş numarası seçin:',
+    order4821:
+      'Sipariş #VIS-4821 (Sunucu Kümesi Taşıma)\nDurum: Dağıtılıyor (%85)\nBölge: Hetzner Nürnberg (DE)\nSonraki adım: Bugün 17:00 CET DNS geçişi.',
+    order4904:
+      'Sipariş #VIS-4904 (n8n CRM Hattı)\nDurum: Canlı ve Sorunsuz\nSon senkronizasyon: 4 dk önce (42 kayıt hatasız aktarıldı).',
+    selectPackage: 'Hangi otomasyon paketini hesaplamak istersiniz?',
+    starterLabel: 'Starter Bot & n8n (1.490 €’dan başlayan)',
+    suiteLabel: 'Full AI & CRM Suite (3.900 €’dan başlayan)',
+    quoteResult: (isSuite) =>
+      `Anlık Teklif Oluşturuldu:\nPaket: ${isSuite ? 'Full AI & CRM Suite' : 'Starter Bot & n8n'}\nTahmini Tutar: ${isSuite ? '3.900 €' : '1.490 €'} net\nTeslimat: ${isSuite ? '3–4 hafta' : '7–10 iş günü'}\nDahil: Hetzner Almanya Docker kurulumu ve GDPR DPA.`,
+    requestFormalQuote: 'Resmi teklif iste',
+    voiceTranscriptReply:
+      'Sesli not (0:06) çözümlendi:\n"Lütfen Cuma öğlene kadar Nordmetall için Hetzner düğümündeki IMAP posta kutusunu etkinleştirin."\n\nOluşturulan Görev:\n· Proje: Nordmetall Onboarding\n· Öncelik: Yüksek\n· Son Tarih: Cuma, 12:00 CET',
+  },
+  pl: {
+    selectOrder: 'Wybierz aktywny numer zlecenia z systemu ERP:',
+    order4821:
+      'Zlecenie #VIS-4821 (Migracja klastra serwerów)\nStatus: Wdrażanie (85%)\nLokalizacja: Hetzner Norymberga (DE)\nKolejny krok: Przełączenie DNS dziś o 17:00 CET.',
+    order4904:
+      'Zlecenie #VIS-4904 (Potok n8n CRM)\nStatus: Produkcyjny i aktywny\nOstatnia synchronizacja: 4 min temu (42 rekordy, 0 błędów).',
+    selectPackage: 'Który pakiet automatyzacji wycenić?',
+    starterLabel: 'Starter Bot & n8n (od 1 490 €)',
+    suiteLabel: 'Full AI & CRM Suite (od 3 900 €)',
+    quoteResult: (isSuite) =>
+      `Wygenerowano szybką wycenę:\nPakiet: ${isSuite ? 'Full AI & CRM Suite' : 'Starter Bot & n8n'}\nSzacunek: ${isSuite ? '3 900 €' : '1 490 €'} netto\nCzas realizacji: ${isSuite ? '3–4 tygodnie' : '7–10 dni roboczych'}\nW cenie: Docker na Hetzner (DE) oraz umowa RODO.`,
+    requestFormalQuote: 'Poproś o wycenę',
+    voiceTranscriptReply:
+      'Notatka głosowa (0:06) przepisana:\n"Proszę aktywować skrzynkę IMAP na serwerze Hetzner dla klienta Nordmetall do piątku do 12:00."\n\nUtworzono zadanie:\n· Projekt: Nordmetall Onboarding\n· Priorytet: Wysoki\n· Termin: Piątek, 12:00 CET',
+  },
+  sq: {
+    selectOrder: 'Zgjidhni një numër aktiv porosie nga ERP-ja juaj:',
+    order4821:
+      'Porosia #VIS-4821 (Migrimi i Klasterit të Serverëve)\nStatusi: Në dorëzim (85 %)\nVendndodhja: Hetzner Nürnberg (DE)\nHapi tjetër: Kalimi DNS sot në 17:00 CET.',
+    order4904:
+      'Porosia #VIS-4904 (Tubacioni n8n CRM)\nStatusi: Aktiv dhe funksional\nSinkronizimi i fundit: para 4 min (42 regjistrime pa gabime).',
+    selectPackage: 'Cilin paketë automatizimi dëshironi ta llogarisim?',
+    starterLabel: 'Starter Bot & n8n (nga 1.490 €)',
+    suiteLabel: 'Full AI & CRM Suite (nga 3.900 €)',
+    quoteResult: (isSuite) =>
+      `Oferta e shpejtë u krijua:\nPaketa: ${isSuite ? 'Full AI & CRM Suite' : 'Starter Bot & n8n'}\nÇmimi orientues: ${isSuite ? '3.900 €' : '1.490 €'} neto\nAfati: ${isSuite ? '3–4 javë' : '7–10 ditë pune'}\nPërfshihet: Docker në Hetzner (DE) & kontratë GDPR AVV.`,
+    requestFormalQuote: 'Kërko ofertë zyrtare',
+    voiceTranscriptReply:
+      'Shënimi zanor (0:06) u transkriptua:\n"Ju lutemi aktivizoni kutinë IMAP në nyjen Hetzner për klientin Nordmetall deri të premten në 12:00."\n\nDetyra e krijuar:\n· Projekti: Nordmetall Onboarding\n· Prioriteti: I lartë\n· Afati: E premte, 12:00 CET',
+  },
+};
+
 export function TelegramBotDemo({
   lang,
   t,
   onApplyToLeadModal,
 }: TelegramBotDemoProps) {
-  const isDE = lang === 'de';
+  const flow = TG_FLOW_COPY[lang];
 
   const getMainButtons = (): InlineButton[] => [
     { id: 'btn-order', label: t.buttons.orderStatus, callbackData: 'cmd:order_status' },
@@ -130,9 +250,7 @@ export function TelegramBotDemo({
           id: `b-${Date.now() + 1}`,
           sender: 'bot',
           time,
-          text: isDE
-            ? 'Wählen Sie eine aktive Auftragsnummer aus Ihrem ERP:'
-            : 'Select an active order ID from your ERP:',
+          text: flow.selectOrder,
           inlineButtons: [
             { id: 'ord-1', label: '#VIS-4821 · Server Migration', callbackData: 'order:VIS-4821' },
             { id: 'ord-2', label: '#VIS-4904 · n8n CRM Sync', callbackData: 'order:VIS-4904' },
@@ -148,9 +266,7 @@ export function TelegramBotDemo({
           id: `b-${Date.now() + 1}`,
           sender: 'bot',
           time,
-          text: isDE
-            ? 'Auftrag #VIS-4821 (Server-Cluster Migration)\nStatus: In Auslieferung (85 %)\nStandort: Hetzner Nürnberg (DE)\nNächster Meilenstein: DNS-Cutover heute 17:00 Uhr.'
-            : 'Order #VIS-4821 (Server Cluster Migration)\nStatus: Deploying (85%)\nRegion: Hetzner Nuremberg (DE)\nNext milestone: DNS cutover today at 17:00 CET.',
+          text: flow.order4821,
           inlineButtons: [{ id: 'back', label: t.buttons.backMenu, callbackData: 'cmd:menu' }],
         };
         break;
@@ -162,9 +278,7 @@ export function TelegramBotDemo({
           id: `b-${Date.now() + 1}`,
           sender: 'bot',
           time,
-          text: isDE
-            ? 'Auftrag #VIS-4904 (n8n CRM-Pipeline)\nStatus: Produktiv & Aktiv\nLetzter Sync: vor 4 Minuten (42 Datensätze fehlerfrei übertragen).'
-            : 'Order #VIS-4904 (n8n CRM Pipeline)\nStatus: Live & Healthy\nLast sync: 4 minutes ago (42 records synced with 0 errors).',
+          text: flow.order4904,
           inlineButtons: [{ id: 'back', label: t.buttons.backMenu, callbackData: 'cmd:menu' }],
         };
         break;
@@ -176,12 +290,10 @@ export function TelegramBotDemo({
           id: `b-${Date.now() + 1}`,
           sender: 'bot',
           time,
-          text: isDE
-            ? 'Welches Automatisierungspaket soll kalkuliert werden?'
-            : 'Which automation package would you like to estimate?',
+          text: flow.selectPackage,
           inlineButtons: [
-            { id: 'q-starter', label: isDE ? 'Starter Bot & n8n (ab 1.490 €)' : 'Starter Bot & n8n (from €1,490)', callbackData: 'quote:starter' },
-            { id: 'q-suite', label: isDE ? 'Full AI & CRM Suite (ab 3.900 €)' : 'Full AI & CRM Suite (from €3,900)', callbackData: 'quote:suite' },
+            { id: 'q-starter', label: flow.starterLabel, callbackData: 'quote:starter' },
+            { id: 'q-suite', label: flow.suiteLabel, callbackData: 'quote:suite' },
             { id: 'back', label: t.buttons.backMenu, callbackData: 'cmd:menu' },
           ],
         };
@@ -196,13 +308,11 @@ export function TelegramBotDemo({
           id: `b-${Date.now() + 1}`,
           sender: 'bot',
           time,
-          text: isDE
-            ? `Sofort-Kalkulation erstellt:\nPaket: ${isSuite ? 'Full AI & CRM Suite' : 'Starter Bot & n8n'}\nRichtpreis: ${isSuite ? '3.900 €' : '1.490 €'} netto\nLieferzeit: ${isSuite ? '3–4 Wochen' : '7–10 Werktage'}\nInklusive: Docker-Setup auf Hetzner (DE) & AVV.`
-            : `Instant Quote Generated:\nPackage: ${isSuite ? 'Full AI & CRM Suite' : 'Starter Bot & n8n'}\nEstimate: ${isSuite ? '€3,900' : '€1,490'} net\nDelivery: ${isSuite ? '3–4 weeks' : '7–10 business days'}\nIncludes: Hetzner Germany Docker setup & GDPR DPA.`,
+          text: flow.quoteResult(isSuite),
           inlineButtons: [
             {
               id: 'apply-lead',
-              label: isDE ? 'Unverbindlich anfragen' : 'Request formal quote',
+              label: flow.requestFormalQuote,
               callbackData: isSuite ? 'lead:suite' : 'lead:starter',
             },
             { id: 'back', label: t.buttons.backMenu, callbackData: 'cmd:menu' },
@@ -230,9 +340,7 @@ export function TelegramBotDemo({
           id: `b-${Date.now() + 1}`,
           sender: 'bot',
           time,
-          text: isDE
-            ? 'Sprachnotiz (0:06) transkribiert:\n"Bitte für Kunde Nordmetall bis Freitag 12 Uhr das IMAP-Postfach auf dem Hetzner-Node aktivieren."\n\nAngelegte Aufgabe:\n· Projekt: Nordmetall Onboarding\n· Priorität: Hoch\n· Fällig: Freitag, 12:00 Uhr'
-            : 'Voice note (0:06) transcribed:\n"Please activate the IMAP mailbox on the Hetzner node for Nordmetall by Friday noon."\n\nCreated Task:\n· Project: Nordmetall Onboarding\n· Priority: High\n· Due: Friday, 12:00 CET',
+          text: flow.voiceTranscriptReply,
           inlineButtons: [{ id: 'back', label: t.buttons.backMenu, callbackData: 'cmd:menu' }],
         };
         break;
@@ -275,7 +383,7 @@ export function TelegramBotDemo({
             rel="noopener noreferrer"
             className="inline-flex items-center gap-1.5 rounded-lg border border-cyan-400/40 bg-cyan-500/15 px-3 py-1.5 text-xs font-semibold text-cyan-200 hover:bg-cyan-500/25 hover:text-white whitespace-nowrap shrink-0"
           >
-            <span>{isDE ? 'In Telegram öffnen' : 'Open in Telegram'}</span>
+            <span>{t.openInTelegram}</span>
             <ExternalLink className="h-3.5 w-3.5" />
           </a>
           <button

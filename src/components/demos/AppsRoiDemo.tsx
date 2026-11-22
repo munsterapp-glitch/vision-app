@@ -1,6 +1,6 @@
 import { ArrowRight, Check, Calculator, ExternalLink, Layers, Server, Smartphone } from 'lucide-react';
 import { useState } from 'react';
-import type { Translations } from '../../i18n/translations';
+import { LANGUAGE_OPTIONS, type Translations } from '../../i18n/translations';
 import type { Language, LeadPrefill } from '../../types';
 
 interface AppsRoiDemoProps {
@@ -29,13 +29,16 @@ export function AppsRoiDemo({
   const monthlySavings = Math.max(1, moneySavedPerYear / 12);
   const paybackMonths = Math.max(0.8, estimatedSetupCost / monthlySavings);
 
-  const formattedMoney = new Intl.NumberFormat(lang === 'de' ? 'de-DE' : 'en-US', {
+  const intlLocale =
+    LANGUAGE_OPTIONS.find((opt) => opt.code === lang)?.intlLocale || 'de-DE';
+
+  const formattedMoney = new Intl.NumberFormat(intlLocale, {
     style: 'currency',
     currency: 'EUR',
     maximumFractionDigits: 0,
   }).format(moneySavedPerYear);
 
-  const formattedHours = new Intl.NumberFormat(lang === 'de' ? 'de-DE' : 'en-US').format(
+  const formattedHours = new Intl.NumberFormat(intlLocale).format(
     hoursSavedPerYear
   );
 
@@ -277,16 +280,22 @@ export function AppsRoiDemo({
 
             <button
               type="button"
-              onClick={() =>
+              onClick={() => {
+                const roiNoteMap: Record<Language, string> = {
+                  de: `ROI-Rechner Ergebnis: ${employees} Mitarbeitende, ${hoursPerWeek} Std./Woche, geschätzte Ersparnis ${formattedMoney}/Jahr (${formattedHours} Std./Jahr).`,
+                  en: `ROI Calculator Estimate: ${employees} employees, ${hoursPerWeek} hrs/week, estimated savings ${formattedMoney}/year (${formattedHours} hrs/year).`,
+                  hr: `Procjena ROI kalkulatora: ${employees} zaposlenika, ${hoursPerWeek} sati/tj., procijenjena ušteda ${formattedMoney}/god. (${formattedHours} sati/god.).`,
+                  ru: `Расчёт ROI: ${employees} сотр., ${hoursPerWeek} ч/нед., ожидаемая экономия ${formattedMoney}/год (${formattedHours} ч/год).`,
+                  tr: `ROI Hesaplayıcı Sonucu: ${employees} çalışan, haftada ${hoursPerWeek} saat, tahmini tasarruf yıllık ${formattedMoney} (yıllık ${formattedHours} saat).`,
+                  pl: `Wynik kalkulatora ROI: ${employees} pracowników, ${hoursPerWeek} godz./tyg., szacowane oszczędności ${formattedMoney}/rok (${formattedHours} godz./rok).`,
+                  sq: `Rezultati i Llogaritësit ROI: ${employees} punonjës, ${hoursPerWeek} orë/javë, kursimi i vlerësuar ${formattedMoney}/vit (${formattedHours} orë/vit).`,
+                };
                 onApplyToLeadModal({
                   services: ['n8n_automation', 'web_android_app', 'docker_hosting'],
-                  notes:
-                    lang === 'de'
-                      ? `ROI-Rechner Ergebnis: ${employees} Mitarbeitende, ${hoursPerWeek} Std./Woche, geschätzte Ersparnis ${formattedMoney}/Jahr (${formattedHours} Std./Jahr).`
-                      : `ROI Calculator Estimate: ${employees} employees, ${hoursPerWeek} hrs/week, estimated savings ${formattedMoney}/year (${formattedHours} hrs/year).`,
+                  notes: roiNoteMap[lang],
                   sourceModule: 'apps_roi',
-                })
-              }
+                });
+              }}
               className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-cyan-500 px-4 py-2.5 text-xs font-semibold text-slate-950 transition-colors hover:bg-cyan-400 cursor-pointer"
             >
               <span>{t.applyToAnalysis}</span>

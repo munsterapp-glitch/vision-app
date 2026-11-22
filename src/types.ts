@@ -1,4 +1,4 @@
-export type Language = 'de' | 'en';
+export type Language = 'de' | 'en' | 'hr' | 'ru' | 'tr' | 'pl' | 'sq';
 
 export type DemoModuleId = 'chatbot' | 'n8n' | 'telegram' | 'apps_roi';
 

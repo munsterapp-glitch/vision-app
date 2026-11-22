@@ -1,6 +1,6 @@
-import { Menu, X } from 'lucide-react';
-import { useState } from 'react';
-import type { Translations } from '../i18n/translations';
+import { Check, ChevronDown, Globe, Menu, X } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import { LANGUAGE_OPTIONS, type Translations } from '../i18n/translations';
 import type { DemoModuleId, Language } from '../types';
 
 interface NavbarProps {
@@ -19,6 +19,35 @@ export function Navbar({
   onOpenLeadModal,
 }: NavbarProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [langMenuOpen, setLangMenuOpen] = useState(false);
+  const langMenuRef = useRef<HTMLDivElement | null>(null);
+
+  const activeLangOption =
+    LANGUAGE_OPTIONS.find((item) => item.code === lang) || LANGUAGE_OPTIONS[0];
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        langMenuRef.current &&
+        !langMenuRef.current.contains(event.target as Node)
+      ) {
+        setLangMenuOpen(false);
+      }
+    };
+
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setLangMenuOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('keydown', handleEscape);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleEscape);
+    };
+  }, []);
 
   const handleNavClick = (action: () => void) => {
     setMobileOpen(false);
@@ -76,35 +105,62 @@ export function Navbar({
           </a>
         </nav>
 
-        {/* Zone 3: Language Switcher + Primary CTA */}
+        {/* Zone 3: Language Switcher Dropdown + Primary CTA */}
         <div className="flex items-center gap-3 shrink-0">
-          <div
-            role="group"
-            aria-label="Language switcher"
-            className="flex items-center rounded-lg border border-white/[0.1] bg-[#0f1623] p-0.5"
-          >
+          <div ref={langMenuRef} className="relative">
             <button
               type="button"
-              onClick={() => onChangeLang('de')}
-              className={`px-2.5 py-1 text-xs font-semibold rounded-md transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
-                lang === 'de'
-                  ? 'bg-cyan-500/20 text-cyan-300'
-                  : 'text-slate-400 hover:text-slate-200'
-              }`}
+              aria-haspopup="listbox"
+              aria-expanded={langMenuOpen}
+              aria-label="Select language"
+              onClick={() => setLangMenuOpen((prev) => !prev)}
+              className="inline-flex items-center gap-1.5 rounded-lg border border-white/[0.12] bg-[#0f1623] px-3 py-1.5 text-xs font-semibold text-slate-200 transition-colors hover:border-cyan-400/50 hover:text-white whitespace-nowrap shrink-0 cursor-pointer"
             >
-              DE
+              <Globe className="h-3.5 w-3.5 text-cyan-400" />
+              <span>{activeLangOption.short}</span>
+              <ChevronDown
+                className={`h-3.5 w-3.5 text-slate-400 transition-transform ${
+                  langMenuOpen ? 'rotate-180' : ''
+                }`}
+              />
             </button>
-            <button
-              type="button"
-              onClick={() => onChangeLang('en')}
-              className={`px-2.5 py-1 text-xs font-semibold rounded-md transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
-                lang === 'en'
-                  ? 'bg-cyan-500/20 text-cyan-300'
-                  : 'text-slate-400 hover:text-slate-200'
-              }`}
-            >
-              EN
-            </button>
+
+            {langMenuOpen && (
+              <div
+                role="listbox"
+                aria-label="Languages"
+                className="absolute right-0 mt-2 w-44 rounded-xl border border-white/[0.1] bg-[#0f1623] p-1.5 shadow-2xl z-50"
+              >
+                {LANGUAGE_OPTIONS.map((option) => {
+                  const isActive = option.code === lang;
+                  return (
+                    <button
+                      key={option.code}
+                      type="button"
+                      role="option"
+                      aria-selected={isActive}
+                      onClick={() => {
+                        onChangeLang(option.code);
+                        setLangMenuOpen(false);
+                      }}
+                      className={`flex w-full items-center justify-between rounded-lg px-3 py-2 text-xs transition-colors cursor-pointer ${
+                        isActive
+                          ? 'bg-cyan-500/15 text-cyan-300 font-semibold'
+                          : 'text-slate-300 hover:bg-white/[0.06] hover:text-white'
+                      }`}
+                    >
+                      <span className="flex items-center gap-2">
+                        <span className="font-mono text-[11px] text-slate-400 w-5 text-left">
+                          {option.short}
+                        </span>
+                        <span>{option.nativeName}</span>
+                      </span>
+                      {isActive && <Check className="h-3.5 w-3.5 text-cyan-300 shrink-0" />}
+                    </button>
+                  );
+                })}
+              </div>
+            )}
           </div>
 
           <button
